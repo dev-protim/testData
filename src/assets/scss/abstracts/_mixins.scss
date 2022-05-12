@@ -1,11 +1,11 @@
-@use "./variables" as *;
+@use "./variables" as abstract;
 @use "./functions" as *;
 // Breakpoint mixins
 @mixin respond-to($breakpoint) {
     // If the key exists in the map
-    @if map-has-key($breakpoints, $breakpoint) {
+    @if map-has-key(abstract.$breakpoints, $breakpoint) {
         // Prints a media query based on the value
-        @media #{inspect(map-get($breakpoints, $breakpoint))} {
+        @media #{inspect(map-get(abstract.$breakpoints, $breakpoint))} {
             @content;
         }
     }
