@@ -1,0 +1,46 @@
+.custom {
+    &-input {
+        &__label {
+            font-size: 0.9em;
+            margin-bottom: 0.5em;
+        }
+        &__group {
+            display: flex;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: var(--input-btn-padding);
+        }
+        // For append icon inside input group
+        &__append {}
+        // For prepend icon inside input group
+        &__prepend {}
+        // For input-field inside input group
+        &__field {
+            border: none;
+            padding: 0;
+            flex: 1;
+            -ms-flex: 1;
+            &::placeholder {
+                color: gray;
+            }
+            &::-moz-placeholder {
+                color: gray;
+            }
+            &:-ms-input-placeholder {
+                color: gray;
+            }
+            &::-webkit-input-placeholder {
+                color: gray;
+            }
+            &:focus {
+                outline: none;
+            }
+            &:not(:first-child) {
+                margin-left: 0.5em;
+            }
+            &:not(:last-child) {
+                margin-right: 0.5em;
+            }
+        }
+    }
+}

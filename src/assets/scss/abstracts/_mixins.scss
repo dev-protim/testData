@@ -1,0 +1,61 @@
+@use "./variables" as *;
+@use "./functions" as *;
+// Breakpoint mixins
+@mixin respond-to($breakpoint) {
+    // If the key exists in the map
+    @if map-has-key($breakpoints, $breakpoint) {
+        // Prints a media query based on the value
+        @media #{inspect(map-get($breakpoints, $breakpoint))} {
+            @content;
+        }
+    }
+    // If the key doesn't exist in the map
+    @else {
+        @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "+"Available breakpoints are: #{map-keys($breakpoints)}.";
+    }
+}
+
+// Font size rem mixins
+@mixin font-size-rem($size) {
+    font-size: $size; // This is for the browser which doesn't support rem
+    font-size: calculateRem($size); // This is for the browser which support rem
+}
+
+// Font size em mixins
+@mixin font-size-em($size) {
+    font-size: calculateEm($size);
+}
+
+// Get font face mixins
+@mixin font-face($font-name, $file-name, $weight, $style) {
+    @font-face {
+        font-family: quote($font-name);
+        src: url($file-name + '.ttf');
+        src: url($file-name + '.ttf') format('embedded-opentype'), url($file-name + '.ttf') format('woff'), url($file-name + '.ttf') format('woff2'), url($file-name + '.ttf') format('truetype'), url($file-name + '.ttf') format('svg');
+        font-weight: $weight;
+        font-style: $style;
+        font-display: swap;
+    }
+}
+
+// Font weight & style mixins
+@mixin font($font-weight, $font-style) {
+    font-weight: $font-weight;
+    font-style: $font-style;
+}
+
+// Margin mixins
+@mixin margin($margin-top, $margin-right, $margin-bottom, $margin-left) {
+    @if ($margin-top !=null) {
+        margin-top: calculateEm($margin-top);
+    }
+    @if ($margin-right !=null) {
+        margin-right: calculateEm($margin-right);
+    }
+    @if ($margin-bottom !=null) {
+        margin-bottom: calculateEm($margin-bottom);
+    }
+    @if ($margin-left !=null) {
+        margin-left: calculateEm($margin-left);
+    }
+}

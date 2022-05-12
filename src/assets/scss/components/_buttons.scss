@@ -1,0 +1,10 @@
+@use '../abstracts/index' as abstract;
+.main-btn {
+    cursor: pointer;
+    background-color: abstract.$primaryColor;
+    color: #fff;
+    width: 100%;
+    padding: var(--input-btn-padding);
+    border-radius: 5px;
+    border: 0;
+}

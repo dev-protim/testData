@@ -1,0 +1,40 @@
+@use '../abstracts/index' as abstract;
+
+/*********************************************
+ * Get all fonts
+ *********************************************/
+
+@include abstract.font-face(OpenSans, "../../fonts/OpenSans-Light", 300, normal);
+@include abstract.font-face(OpenSans, "../../fonts/OpenSans-Regular", 400, normal);
+@include abstract.font-face(OpenSans, "../../fonts/OpenSans-Medium", 500, normal);
+@include abstract.font-face(OpenSans, "../../fonts/OpenSans-SemiBold", 600, normal);
+@include abstract.font-face(OpenSans, "../../fonts/OpenSans-Bold", 700, normal);
+@include abstract.font-face(OpenSans, "../../fonts/OpenSans-ExtraBold", 800, normal);
+
+/*************************************************
+ * Typography
+ * declared here
+ *************************************************/
+
+html {
+    @include abstract.font-size-rem(16);
+}
+
+body {
+    @include abstract.font-size-em(14);
+    font-family: OpenSans;
+    @include abstract.font(400, normal);
+    @include abstract.respond-to(small) {
+        @include abstract.font-size-em(16);
+    }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    @include abstract.font(700, normal);
+    @include abstract.margin(15, 0, 0, null);
+}

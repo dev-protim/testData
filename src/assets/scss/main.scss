@@ -1,0 +1,7 @@
+// Import scss
+@use '../scss/abstracts/index' as abstract;
+@use '../scss/vendors/index' as vendor;
+@use '../scss/base/index' as base;
+@use '../scss/layout/index' as layout;
+@use '../scss/components/index' as component;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap');

@@ -1,0 +1,11 @@
+:root {
+    --input-btn-padding: 0.7em 0.9em;
+}
+
+$breakpoints: ( 'small': (min-width: 768px), 'medium': (min-width: 992px), 'large': (min-width: 1200px)) !default;
+$primaryColor: #293984;
+$secondaryColor: #FFB401;
+$basement: 16;
+$leading-base: 1.4;
+$line-height-base: round($basement * $leading-base); // 16 * 1.4
+$baseline: $line-height-base * 1px;
