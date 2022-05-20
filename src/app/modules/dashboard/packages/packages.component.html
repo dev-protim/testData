@@ -51,9 +51,9 @@
 <!-- <nz-modal [(nzVisible)]="isVisible" nzTitle="The first Modal" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"> -->
 <nz-modal [(nzVisible)]="isVisible" nzTitle="Upload Path" (nzOnCancel)="handleCancel()" [nzFooter]="uploadedPathFooter" [nzCloseIcon]="modalCloseIcon">
     <ng-container *nzModalContent>
-        <input type="text" [value]="isPackageInfo?.package_id" [(ngModel)]="packageIdModel"><br>
+        <!-- <input type="text" [value]="isPackageInfo?.package_id" [(ngModel)]="packageIdModel"><br>
         <input type="file" id="file" (change)="onSelectedFile($event)">
-        <button class="main-btn" (click)="handleUpload()">Continue <i class="flaticon-right-arrows"></i></button>
+        <button class="main-btn" (click)="handleUpload()">Continue <i class="flaticon-right-arrows"></i></button> -->
         <form [formGroup]="packageUploadForm" (ngSubmit)="handleUpload()" *ngIf="!uploading">
             <div class="custom-input">
                 <div class="custom-input__label">
@@ -104,7 +104,7 @@
             </div>
 
         </form>
-        <div class="path-uploading__status" *ngIf="!uploading">
+        <div class="path-uploading__status" *ngIf="uploading">
             <div class="path-uploading__animation">
                 <nz-progress [nzPercent]="isProgressWidth" nzType="circle"></nz-progress>
             </div>

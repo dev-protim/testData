@@ -137,7 +137,7 @@ export class PackagesComponent implements OnInit {
 	// 	}
 	// }
 	handleUpload(): void {
-		// this.uploading = true;
+		this.uploading = true;
 		const formData = new FormData();
 		// formData.append('name', this.packageUploadForm.get('name').value);
 		console.log(typeof(formData));
@@ -159,20 +159,10 @@ export class PackagesComponent implements OnInit {
 			reportProgress: true,
 			observe: "events"
 		})
-		// .subscribe((event: any) => {
-		// 	if (event.type === HttpEventType.UploadProgress) {
-		// 		this.isProgressWidth = Math.round(event.loaded / event.total) * 100;
-		// 		console.log(this.isProgressWidth);
-		// 	}
-		// 	else if (event.type === HttpEventType.Response) {
-		// 		this.isProgressWidth = 0;
-		// 		this.fileUploadMessage = "Your file uploaded successfully!";
-		// 	}
-		// })
 		.pipe(map(
 			(event: any) => {
 				if (event.type === HttpEventType.UploadProgress) {
-					this.isProgressWidth = Math.round(event.loaded / event.total) * 100;
+					this.isProgressWidth = Math.round(100 * event.loaded / event.total);
 					console.log(this.isProgressWidth)
 				}
 				else if (event.type === HttpEventType.Response) {
@@ -180,29 +170,35 @@ export class PackagesComponent implements OnInit {
 				}
 			}
 		))
-		.subscribe(
-			res => {
-			//   this.uploading = false;
-			//   this.fileList = [];
-			this.fileUploadMessage = "Your file uploaded successfully!";
-			console.log(res, "response");
-			//   this.msg.success('upload successfully.');
-			},
-			() => {
-				this.fileUploadMessage = "There is an error with your file upload.";
-			//   this.uploading = false;
-
-			//   this.msg.error('upload failed.');
-			}
-		);
 		// .subscribe(
 		// 	res => {
-		// 		this.fileUploadMessage = "Your file uploaded successfully!";
+		// 	//   this.uploading = false;
+		// 	//   this.fileList = [];
+		// 	this.fileUploadMessage = "Your file uploaded successfully!";
+		// 	console.log(res, "response");
+		// 	//   this.msg.success('upload successfully.');
 		// 	},
-		// 	error => {
+		// 	() => {
 		// 		this.fileUploadMessage = "There is an error with your file upload.";
+		// 	//   this.uploading = false;
+
+		// 	//   this.msg.error('upload failed.');
 		// 	}
-		// )
+		// );
+		.subscribe(
+			res => {
+				// this.msg.success('uploading...');
+				this.fileUploadMessage = "Your file is uploading...";
+			},
+			error => {
+				// this.msg.error('upload failed.');
+				this.fileUploadMessage = "There is an error with your file upload.";
+			},
+			() => {
+				// this.msg.success('upload successfully.');
+				this.fileUploadMessage = "Your file uploaded successfully!";
+			}
+		)
 		// .subscribe({
 		// 	complete: () => { ... }, // completeHandler
 		// 	error: () => { ... },    // errorHandler
