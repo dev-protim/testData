@@ -1,0 +1,233 @@
+@use '../abstracts/index' as abstract;
+
+/**************************************
+* All overrides scss goes here
+**************************************/
+
+
+/*------------------------------------------------------------------
+[ International phone number ]*/
+
+.international-phone__input {
+    flex: 0 0 auto;
+    width: 100%;
+    .dropbtn {
+        @include abstract.padding(0, 0, 0, 0);
+        background-color: transparent !important;
+        color: var(--text-color) !important;
+        line-height: 1;
+        position: relative;
+        width: 32px;
+        display: flex;
+        &:after {
+            content: "\f106";
+            font-family: Flaticon;
+            position: absolute;
+            line-height: 1;
+            font-size: 1em;
+            right: -3px;
+            top: -2px;
+        }
+        .arrow-down {
+            display: none;
+        }
+    }
+    #dial-code {
+        padding-top: 0 !important;
+        @include abstract.font-size-em(15);
+        color: var(--text-color);
+        margin-left: 0.75em !important;
+        margin-bottom: 0 !important;
+    }
+    input {
+        margin-left: 0.3em !important;
+    }
+    .dropdown {
+        position: inherit !important;
+        &-content {
+            top: calc(100% + 0.85em);
+            left: -1.05em;
+            width: calc(100% + 2.1em);
+            background-color: var(--theme-bg) !important;
+            border-radius: 5px;
+            overflow: hidden;
+            @include abstract.box-shadow(0, 6, 17, 0.1, rgba(abstract.$grayColor, 0.07), important);
+            .scrollable-menu {
+                width: 100% !important;
+                @include abstract.scrollbar(5px, abstract.$grayColor, transparent);
+            }
+            a {
+                padding: 0.5em 0.7em 0.5em 0.7em !important;
+                border: 0;
+                @include abstract.font-size-em(14);
+                &:not(:first-child) {
+                    padding-top: 0 !important;
+                }
+                .flag {
+                    position: relative;
+                    top: 1px;
+                }
+                .country-name {
+                    margin-left: 0.6em !important;
+                }
+            }
+        }
+    }
+}
+
+// International phone number ends here
+
+/*------------------------------------------------------------------
+[ Ng zorro ]*/
+
+// Tooltip starts
+.ant-tooltip {
+    &-placement-topLeft {
+        transform: translateX(-12px)
+    }
+    &-inner {
+        @include abstract.font-size-em(14);
+        @include abstract.font-weight(500);
+        color: var(--theme-bg);
+        background-color: var(--text-color);
+        @include abstract.padding(8, 10, 8, 10);
+        border-radius: 3px;
+    }
+}
+
+// Tooltip ends
+// Upload starts
+.ant-upload.ant-upload-drag {
+    border: 1px dashed #ddd;
+    border-radius: 5px;
+    padding: var(--input-btn-padding);
+    background-color: rgba(abstract.$primaryColor, 0.03);
+    .ant-upload-btn {
+        padding: var(--input-btn-padding);
+    }
+    p.ant-upload-drag-icon {
+        background-color: rgba(abstract.$primaryColor, 0.1);
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        @include abstract.margin(null, null, 17, null);
+        margin-inline: auto;
+        i {
+            color: abstract.$primaryColor;
+            @include abstract.font-size-em(21);
+            line-height: 1px;
+        }
+    }
+    p.ant-upload-text {
+        @include abstract.margin(null, null, 3, null);
+        @include abstract.font-size-em(19);
+        @include abstract.font-weight(500);
+    }
+    p.ant-upload-hint {
+        @include abstract.font-size-em(15);
+        color: rgba(#0a1125, 0.5);
+    }
+}
+
+.ant-progress-inner {
+    background-color: rgba(abstract.$primaryColor, 0.03);
+}
+
+.ant-progress-status-success .ant-progress-text {
+    // text-align: right;
+    line-height: 1px;
+}
+
+.ant-upload.ant-upload-drag {
+    background-color: rgba(abstract.$primaryColor, 0.03);
+}
+
+.ant-progress-bg {
+    background-color: abstract.$primaryColor;
+}
+
+.ant-progress-text {
+    color: var(--text-color);
+    @include abstract.font-size-em(15);
+}
+
+.ant-progress-circle .ant-progress-inner {
+    width: 120px !important;
+    height: 120px !important;
+}
+
+.ant-progress-circle {
+    @include abstract.margin(null, null, 10, null);
+    .ant-progress-text {
+        color: var(--text-color);
+    }
+}
+
+.ant-progress-circle-trail {
+    stroke: rgba(abstract.$primaryColor, 0.03);
+}
+
+.ant-progress-inner:not(.ant-progress-circle-gradient) .ant-progress-circle-path {
+    stroke: abstract.$primaryColor;
+}
+
+// Upload ends
+// Modal starts
+.ant-modal {
+    font-size: 0.9375em;
+    &-content {
+        @include abstract.box-shadow(0, 5, 17, 4, rgba(#0a1125, 0.16), null);
+        border-radius: 5px;
+        overflow: hidden;
+    }
+    &-header {
+        @include abstract.padding(13, 20, 13, 20);
+        border-bottom: 1px solid rgba(abstract.$grayColor, 0.42);
+        .ant-modal-title {
+            @include abstract.font-size-em(18);
+            color: var(--text-color);
+        }
+    }
+    &-close {
+        position: absolute;
+        top: 8px;
+        right: 9px;
+        color: var(--text-color);
+        transition: color 0.3s linear;
+        &:hover {
+            color: abstract.$secondaryColor;
+        }
+        &-x {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 25px;
+            height: 27px;
+            font-size: 12px;
+            line-height: 1;
+        }
+    }
+    &-body {
+        @include abstract.padding(13, 20, 13, 20);
+        font-size: 1em;
+    }
+    &-footer {
+        @include abstract.padding(13, 20, 13, 20);
+        border-top: 1px solid rgba(abstract.$grayColor, 0.42);
+    }
+}
+
+.modal-footer {
+    border-top: 0;
+    padding: 0;
+    border-radius: 0;
+    >* {
+        margin: 0;
+    }
+}
+
+// Modal ends
+// Ng zorro ends here

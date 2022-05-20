@@ -1,0 +1,132 @@
+@use 'variables' as abstract;
+@use 'mixins' as *;
+
+/**********************************
+ * Sidebar view styles
+**********************************/
+
+.sidebar {
+    height: 100%;
+    flex: 0 0 auto;
+    width: 175px;
+    position: fixed;
+    top: 40px;
+    left: 0;
+    z-index: 11;
+    @include respond-to(max-medium) {
+        background-color: var(--theme-bg);
+        transform: translateX(-120%);
+        transition: transform 0.3s ease-in-out;
+        @include box-shadow(5, 0, 17, 4, rgba(abstract.$grayColor, 0.16), null);
+        &.active {
+            transform: translateX(0)
+        }
+    }
+    &-inner {
+        @include padding(15, 15, 15, 15);
+        height: 100%;
+        @include respond-to(large) {
+            @include padding(20, 25, 20, 25);
+        }
+    }
+    @include respond-to(medium) {
+        top: 0;
+        width: var(--side-nav-width);
+        background-color: transparent;
+        transform: none;
+    }
+    &-logo {
+        text-align: center;
+        @include margin(null, null, 30, null);
+        img {
+            max-width: 55px;
+            margin-inline: auto;
+        }
+        @include respond-to(large) {
+            @include margin(null, null, 45, null);
+            img {
+                max-width: 70px;
+            }
+        }
+    }
+    &-info {
+        text-align: center;
+        @include margin(null, null, 45, null);
+        &__thumb {
+            img {
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                @include margin(null, null, 8, null);
+                border: 1px solid rgba(abstract.$grayColor, 0.42);
+            }
+            h3 {
+                @include font-size-em(15);
+                @include margin(null, null, 2, null);
+            }
+            p {
+                @include margin(0, 0, 0, 0);
+                @include font-size-em(14);
+            }
+        }
+        @include respond-to(large) {
+            @include margin(null, null, 60, null);
+            &__thumb {
+                img {
+                    width: 80px;
+                    height: 80px;
+                    @include margin(null, null, 7, null);
+                }
+                h3 {
+                    @include font-size-em(18);
+                }
+                p {
+                    @include font-size-em(15);
+                }
+            }
+        }
+    }
+    &-menu {
+        @include box-shadow(0, 5, 17, 4, rgba(abstract.$grayColor, 0.16), null);
+        @include padding(15, 15, 15, 15);
+        border-radius: 5px;
+        background-color: var(--theme-bg);
+        ul {
+            @include padding(0, 0, 0, 0);
+            @include margin(0, 0, 0, 0);
+            li {
+                @include font-size-em(13);
+                list-style: none;
+                @include font(500, normal);
+                &:not(:last-child) {
+                    @include margin(null, null, 10, null);
+                }
+                i {
+                    @include font-size-em(15);
+                    @include margin(null, 10, null, null);
+                    vertical-align: middle;
+                }
+                a {
+                    display: block;
+                    &.active {
+                        color: abstract.$primaryColor;
+                    }
+                }
+            }
+        }
+        @include respond-to(large) {
+            @include padding(20, 20, 20, 20);
+            ul {
+                li {
+                    @include font-size-em(14);
+                    &:not(:last-child) {
+                        @include margin(null, null, 12, null);
+                    }
+                    i {
+                        @include font-size-em(16);
+                    }
+                }
+            }
+        }
+    }
+}

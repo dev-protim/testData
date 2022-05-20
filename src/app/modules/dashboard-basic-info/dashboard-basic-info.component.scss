@@ -1,0 +1,20 @@
+@use 'variables' as abstract;
+@use 'mixins' as *;
+
+/**********************************
+ * Dashboard basic info styles
+**********************************/
+
+.dashboard {
+    &-basic {
+        &__info {
+            h3 {
+                @include font-size-em(24);
+            }
+            p {
+                @include font-size-em(14);
+                @include margin(0, 0, 0, 0);
+            }
+        }
+    }
+}

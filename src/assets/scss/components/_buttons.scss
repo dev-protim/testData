@@ -1,10 +1,73 @@
 @use '../abstracts/index' as abstract;
+
+/********************************************
+ * Get button styles
+********************************************/
+
+button {
+    &:focus,
+    &:active {
+        box-shadow: none !important;
+        outline: 0;
+    }
+}
+
 .main-btn {
     cursor: pointer;
     background-color: abstract.$primaryColor;
-    color: #fff;
-    width: 100%;
+    color: var(--theme-bg);
+    // width: 100%;
     padding: var(--input-btn-padding);
     border-radius: 5px;
-    border: 0;
+    border: 1px solid abstract.$primaryColor;
+    line-height: 1;
+    @include abstract.font-size-em(15);
+    height: 42px;
+    min-width: 150px;
+    transition: all 0.3s linear;
+    i {
+        @include abstract.font-size-em(15);
+        @include abstract.margin(null, 8, null, 8);
+        display: inline-flex;
+        position: relative;
+        top: 1px;
+        transition: transform 0.2s cubic-bezier(0.4, 0.29, 0.19, 0.46);
+    }
+    &:hover {
+        i {
+            transform: translateX(10px);
+        }
+    }
+    @include abstract.respond-to(small) {
+        height: 50px;
+        min-width: 180px;
+    }
+    &__border {
+        background-color: transparent;
+        color: abstract.$primaryColor;
+        &:hover {
+            background-color: abstract.$primaryColor;
+            color: var(--theme-bg);
+        }
+    }
+    &__gray {
+        background-color: abstract.$grayColor;
+        border-color: abstract.$grayColor;
+        color: var(--text-color);
+        &:hover {
+            color: var(--text-color);
+            background-color: abstract.$grayColor;
+        }
+    }
+    &__orange {
+        background-color: abstract.$secondaryColor;
+        border-color: abstract.$secondaryColor;
+        &:hover {
+            background-color: abstract.$secondaryColor;
+        }
+    }
+    &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
 }

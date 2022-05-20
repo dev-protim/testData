@@ -1,0 +1,44 @@
+@use 'variables' as abstract;
+@use 'mixins' as *;
+
+/**********************************
+ * Dashboard header styles
+**********************************/
+
+.dashboard {
+    &-header {
+        background-color: var(--theme-bg);
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 40px;
+        width: 100%;
+        @include box-shadow(0, 5, 17, 4, rgba(abstract.$grayColor, 0.16), null);
+        display: block;
+        @include padding(null, 15, null, 15);
+        @include respond-to(medium) {
+            display: none;
+        }
+        // .container-fluid {
+        //     height: 100%;
+        // }
+        &__list {
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            ul {
+                li {
+                    @include font-size-em(23);
+                    list-style: none;
+                    display: inline-flex;
+                    align-items: center;
+                    height: 100%;
+                    cursor: pointer;
+                    i {
+                        line-height: 1;
+                    }
+                }
+            }
+        }
+    }
+}

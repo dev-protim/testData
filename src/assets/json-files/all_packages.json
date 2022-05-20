@@ -1,0 +1,69 @@
+{
+    "msg": "package get successfully",
+    "status": 200,
+    "data": [{
+            "package_name": "com.android.settings",
+            "package_id": "bfb475aadaf84a52b1047b8d3abea303",
+            "status": true,
+            "apk_path": "",
+            "type": "both",
+            "created_at": "2022-03-31"
+        },
+        {
+            "package_name": "com.android.soundrecorder",
+            "package_id": "9181353e2fc240168a050a12f8bda1e3",
+            "status": true,
+            "apk_path": "",
+            "type": "launcher_apps",
+            "created_at": "2022-03-31"
+        },
+        {
+            "package_name": "com.android.browser",
+            "package_id": "3bbe63806a2248349b20d67eb5d133ba",
+            "status": true,
+            "apk_path": "",
+            "type": "locker_apps",
+            "created_at": "2022-03-31"
+        },
+        {
+            "package_name": "com.android.calendar",
+            "package_id": "433614e04ec646848b1757d792976af1",
+            "status": true,
+            "apk_path": "",
+            "type": "locker_apps",
+            "created_at": "2022-03-31"
+        },
+        {
+            "package_name": "com.yotech.yokeyboard",
+            "package_id": "070a9a54bc484ab6af30a010606d18eb",
+            "status": true,
+            "apk_path": "yo-launcher-apk/070a9a54bc484ab6af30a010606d18eb.apk",
+            "type": "both",
+            "created_at": "2022-03-31"
+        },
+        {
+            "package_name": "com.yotech.butterknife",
+            "package_id": "b94e89ae7bdc4eb1b375c1ba6d066f70",
+            "status": true,
+            "apk_path": "yo-launcher-apk/b94e89ae7bdc4eb1b375c1ba6d066f70.apk",
+            "type": "both",
+            "created_at": "2022-03-31"
+        },
+        {
+            "package_name": "com.yo.wings",
+            "package_id": "36b368352316496382ae0d08d984f206",
+            "status": true,
+            "apk_path": "yo-launcher-apk/36b368352316496382ae0d08d984f206.apk",
+            "type": "launcher_apps",
+            "created_at": "2022-03-31"
+        },
+        {
+            "package_name": "com.yotech.yolauncher",
+            "package_id": "ea18a724dda14eb38f54f0a671f8abad",
+            "status": true,
+            "apk_path": "yo-launcher-apk/ea18a724dda14eb38f54f0a671f8abad.apk",
+            "type": "launcher_apps",
+            "created_at": "2022-04-17"
+        }
+    ]
+}

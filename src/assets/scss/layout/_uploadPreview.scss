@@ -1,0 +1,46 @@
+@use '../abstracts/index' as abstract;
+
+/********************************************
+ * Uploaded preview styles
+ ********************************************/
+
+.uploaded-preview {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    @include abstract.padding(15, 18, 15, 18);
+    @include abstract.margin(20, null, null, null);
+    &__info {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        // @include abstract.margin(null, null, 3, null);
+        i {
+            @include abstract.font-size-em(18);
+            line-height: 1px;
+            @include abstract.margin(null, 10, null, null);
+            color: var(--theme-color);
+            position: relative;
+            top: 1px;
+        }
+        p {
+            @include abstract.font-size-em(15);
+            @include abstract.margin(null, 10, null, null);
+            color: var(--theme-color);
+        }
+    }
+    &__delete {
+        margin-left: auto;
+        line-height: 1px;
+        color: rgba(#0a1125, 0.5);
+        transition: color 0.3s linear;
+        &:hover {
+            color: abstract.$secondaryColor;
+        }
+        cursor: pointer;
+        i {
+            @include abstract.margin(null, 0, null, null);
+        }
+    }
+}

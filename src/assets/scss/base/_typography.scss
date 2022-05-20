@@ -24,6 +24,7 @@ body {
     @include abstract.font-size-em(14);
     font-family: OpenSans;
     @include abstract.font(400, normal);
+    color: var(--text-color);
     @include abstract.respond-to(small) {
         @include abstract.font-size-em(16);
     }
@@ -36,5 +37,28 @@ h4,
 h5,
 h6 {
     @include abstract.font(700, normal);
-    @include abstract.margin(15, 0, 0, null);
+    @include abstract.margin(null, null, 5, null);
+    font-size: inherit;
+}
+
+p {
+    @include abstract.font-size-em(14);
+    @include abstract.margin(null, null, 0, null);
+    @include abstract.respond-to(small) {
+        @include abstract.font-size-em(15);
+    }
+}
+
+a {
+    color: var(--text-color);
+    text-decoration: none;
+    &:hover {
+        color: abstract.$primaryColor;
+    }
+}
+
+ul,
+ol {
+    padding-left: 0;
+    margin-bottom: 0;
 }

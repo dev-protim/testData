@@ -17,7 +17,7 @@
 
 // Font size rem mixins
 @mixin font-size-rem($size) {
-    font-size: $size; // This is for the browser which doesn't support rem
+    font-size: $size * 1px; // This is for the browser which doesn't support rem
     font-size: calculateRem($size); // This is for the browser which support rem
 }
 
@@ -57,5 +57,76 @@
     }
     @if ($margin-left !=null) {
         margin-left: calculateEm($margin-left);
+    }
+}
+
+// Margin mixins
+@mixin padding($padding-top, $padding-right, $padding-bottom, $padding-left) {
+    @if ($padding-top !=null) {
+        padding-top: calculateEm($padding-top);
+    }
+    @if ($padding-right !=null) {
+        padding-right: calculateEm($padding-right);
+    }
+    @if ($padding-bottom !=null) {
+        padding-bottom: calculateEm($padding-bottom);
+    }
+    @if ($padding-left !=null) {
+        padding-left: calculateEm($padding-left);
+    }
+}
+
+// Font weight mixins
+@mixin font-weight($font-weight) {
+    font-weight: $font-weight;
+}
+
+// Placeholder mixins
+@mixin placeholder {
+    &::placeholder {
+        color: abstract.$grayColor;
+    }
+    &::-moz-placeholder {
+        color: abstract.$grayColor;
+    }
+    &:-ms-input-placeholder {
+        color: abstract.$grayColor;
+    }
+    &::-webkit-input-placeholder {
+        color: abstract.$grayColor;
+    }
+}
+
+// Scrollbar mixins
+@mixin scrollbar($size, $foreground-color, $background-color: mix($foreground-color, white, 50%)) {
+    // For Google Chrome
+    &::-webkit-scrollbar {
+        width: $size;
+        height: $size;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: $foreground-color;
+        border-radius: 5px;
+        &:hover {
+            background-color: $foreground-color;
+        }
+    }
+    &::-webkit-scrollbar-track {
+        background: $background-color;
+    }
+    // For Internet Explorer
+    & {
+        scrollbar-face-color: $foreground-color;
+        scrollbar-track-color: $background-color;
+    }
+}
+
+// Box shadow mixins
+@mixin box-shadow($shadow-offset-x, $shadow-offset-y, $shadow-blur-radius, $shadow-spread-radius, $shadow-color, $important) {
+    @if ($important!=important) {
+        box-shadow: $shadow-offset-x+px $shadow-offset-y+px $shadow-blur-radius+px $shadow-spread-radius+px $shadow-color;
+    }
+    @else {
+        box-shadow: $shadow-offset-x+px $shadow-offset-y+px $shadow-blur-radius+px $shadow-spread-radius+px $shadow-color !important;
     }
 }

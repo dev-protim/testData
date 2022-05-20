@@ -2,26 +2,45 @@
 <section class="authentication-section">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-6 position-relative authentication-fixed">
+            <div class="col-md-6 position-relative authentication-fixed d-none d-md-block">
                 <div class="authentication-banner" [ngStyle]="{width: fixedWidth+'px', left: fixedLeft+'px'}">
-                    <img src="assets/img/authentication/login.png" alt="Login">
+                    <img src="assets/img/authentication/authentication-illustration.png" alt="Login">
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="authentication-content">
-                    <img src="assets/img/authentication/logo.png" alt="Logo">
+                    <img src="assets/img/logo.png" alt="Logo">
                     <h2>Sign In</h2>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc arcu nisl, facilisis lacinia dignissim at</p>
                     <form>
-                        <div class="custom-input">
-                            <label for="" class="custom-input__label">Email</label>
+                        <div class="custom-input" *ngIf="isEmail">
+                            <div class="custom-input__label">
+                                <label for="" class="custom-input__label">Email</label>
+                                <p class="t-col-secondary font-weight-500 c-pointer" (click)="changeAuthMedium('phone')">Continue with Phone?</p>
+                            </div>
                             <div class="custom-input__group">
-                                <div class="custom-input__append">8</div>
+                                <div class="custom-input__append"><i class="flaticon-envelope"></i></div>
                                 <input type="text" class="custom-input__field" placeholder="Email">
-                                <div class="custom-input__prepend">8</div>
                             </div>
                         </div>
-                        <button class="main-btn">Continue</button>
+                        <div class="custom-input" *ngIf="isPhone">
+                            <div class="custom-input__label">
+                                <label for="" class="custom-input__label">Phone</label>
+                                <p class="t-col-secondary font-weight-500 c-pointer" (click)="changeAuthMedium('email')">Continue with Email?</p>
+                            </div>
+                            <div class="custom-input__group">
+                                <international-phone-number2 [(ngModel)]="phoneNumber" placeholder="Enter phone number" [defaultCountry]="'bd'" [required]="true" name="phone_number" class="international-phone__input"></international-phone-number2>
+                            </div>
+                        </div>
+                        <div class="custom-input">
+                            <label for="">Password</label>
+                            <div class="custom-input__group">
+                                <div class="custom-input__append"><i class="flaticon-padlock"></i></div>
+                                <input type="password" class="custom-input__field password" placeholder="Password">
+                                <div class="custom-input__prepend c-pointer" (click)="togglePasswordView()"><i [ngClass]="istextView ? 'flaticon-hide' : 'flaticon-show'"></i></div>
+                            </div>
+                        </div>
+                        <button class="main-btn">Continue <i class="flaticon-right-arrows"></i></button>
                     </form>
                 </div>
             </div>

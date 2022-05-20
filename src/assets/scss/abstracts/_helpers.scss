@@ -1,0 +1,32 @@
+@use "./variables" as abstract;
+@use "./mixins" as *;
+
+/*********************************************
+ * Helper classes
+ *********************************************/
+
+.t-col-primary {
+    color: abstract.$primaryColor !important;
+}
+
+.t-col-secondary {
+    color: abstract.$secondaryColor !important;
+}
+
+.c-pointer {
+    cursor: pointer;
+}
+
+// Font weight
+@for $i from 1 through 9 {
+    .font-weight-#{$i * 100} {
+        @include font-weight(#{$i * 100});
+    }
+}
+
+.s-margin-bottom {
+    @include margin(null, null, 20, null);
+    @include respond-to(medium) {
+        @include margin(null, null, 30, null);
+    }
+}

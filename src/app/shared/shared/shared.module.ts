@@ -66,14 +66,19 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzResizableModule } from 'ng-zorro-antd/resizable';
 import { NzPipesModule } from 'ng-zorro-antd/pipes';
-import { FormsModule } from '@angular/forms';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { InternationalPhoneNumber2Module } from 'ngx-international-phone-number2';
+import { DashboardBasicInfoComponent } from 'src/app/modules/dashboard-basic-info/dashboard-basic-info.component';
+import { ApiCallService } from 'src/app/services/api-call/api-call.service';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+	DashboardBasicInfoComponent
+  ],
   imports: [
     CommonModule,
 	FormsModule,
+	ReactiveFormsModule,
     NzAffixModule,
 	NzAlertModule,
 	NzAnchorModule,
@@ -139,10 +144,13 @@ import { FormsModule } from '@angular/forms';
 	NzUploadModule,
 	NzWaveModule,
 	NzResizableModule,
-	NzPipesModule
+	NzPipesModule,
+	InternationalPhoneNumber2Module
   ],
+  providers: [ApiCallService],
   exports: [
 	FormsModule,
+	ReactiveFormsModule,
     NzAffixModule,
 	NzAlertModule,
 	NzAnchorModule,
@@ -208,7 +216,9 @@ import { FormsModule } from '@angular/forms';
 	NzUploadModule,
 	NzWaveModule,
 	NzResizableModule,
-	NzPipesModule
+	NzPipesModule,
+	InternationalPhoneNumber2Module,
+	DashboardBasicInfoComponent
   ]
 })
 export class SharedModule { }

@@ -1,45 +1,76 @@
+@use '../abstracts/index' as abstract;
+
+/********************************************
+* Input
+********************************************/
+
+input,
+textarea {
+    @include abstract.font-size-em(15);
+    @include abstract.placeholder;
+    border: none;
+    padding: 0;
+    &:focus {
+        outline: none;
+    }
+}
+
+
+/*------------------------------------------------------------------
+[ Custom input group ]*/
+
 .custom {
     &-input {
-        &__label {
+        label {
             font-size: 0.9em;
             margin-bottom: 0.5em;
+        }
+        &__label {
+            display: flex;
+            justify-content: space-between;
+            p {
+                font-size: 0.9em;
+                margin-bottom: 0.5em;
+                &:not(:first-child) {
+                    @include abstract.margin(null, null, null, 10);
+                }
+            }
         }
         &__group {
             display: flex;
             border: 1px solid #ddd;
             border-radius: 5px;
             padding: var(--input-btn-padding);
+            line-height: abstract.$line-height-base * 1px;
+            height: 42px;
+            @include abstract.respond-to(small) {
+                height: 50px;
+            }
         }
         // For append icon inside input group
-        &__append {}
+        &__append {
+            @include abstract.font-size-em(16);
+            flex: 0 0 auto;
+            width: 16px;
+            text-align: center;
+            i {
+                line-height: 1px;
+                vertical-align: middle;
+            }
+        }
         // For prepend icon inside input group
-        &__prepend {}
+        &__prepend {
+            @extend .custom-input__append;
+        }
         // For input-field inside input group
         &__field {
-            border: none;
-            padding: 0;
             flex: 1;
             -ms-flex: 1;
-            &::placeholder {
-                color: gray;
-            }
-            &::-moz-placeholder {
-                color: gray;
-            }
-            &:-ms-input-placeholder {
-                color: gray;
-            }
-            &::-webkit-input-placeholder {
-                color: gray;
-            }
-            &:focus {
-                outline: none;
-            }
             &:not(:first-child) {
-                margin-left: 0.5em;
+                @include abstract.margin(null, null, null, 12);
             }
             &:not(:last-child) {
-                margin-right: 0.5em;
+                @include abstract.margin(null, 12, null, null);
             }
         }
     }

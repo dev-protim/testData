@@ -1,0 +1,22 @@
+@use '../abstracts/index' as abstract;
+
+/********************************************
+ * Modal styles
+ ********************************************/
+
+.modal {
+    &-footer {
+        &__buttons {
+            .main-btn {
+                &:not(:last-child) {
+                    @include abstract.margin(null, 10, null, null);
+                }
+                @include abstract.respond-to(small) {
+                    width: 100px;
+                    min-width: 100px;
+                    height: 43px;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,125 @@
+<div class="dashboard-box">
+    <div class="dashboard-box__header">
+        <div class="dashboard-box__header--title">
+            <h3>All Packages</h3>
+            <p>Lorem ipsum dolor sit amet consectetur </p>
+        </div>
+        <button class="main-btn">Create Package</button>
+    </div>
+    <div class="dashboard-box__body">
+        <div class="dashboard-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Path</th>
+                        <th>Type</th>
+                        <th>Date <i class="flaticon-information-button" nzTooltipTitle="Package created date" nzTooltipPlacement="topLeft" nz-tooltip></i></th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let package of packageList?.data; let i = index;">
+                        <td>{{package.package_name}}</td>
+                        <td>
+                            <ng-container *ngIf="package.apk_path"><span #packagePath>{{package.apk_path}}</span><button class="main-btn" (click)="copyInput(packagePath, package)">{{package.copy | titlecase}}</button></ng-container>
+                            <ng-container *ngIf="!package.apk_path">No path available for this package</ng-container>
+                        </td>
+                        <td>{{package.type | titlecase}}</td>
+                        <td>{{package.created_at | titlecase}}</td>
+                        <td>
+                            <ng-container *ngIf="package.status === true">Active</ng-container>
+                            <ng-container *ngIf="package.status === false">Deactive</ng-container>
+                        </td>
+                        <td>
+                            <div class="dashboard-table__buttons">
+                                <button class="main-btn">Update</button>
+                                <button class="main-btn main-btn__border" (click)="openUploadModal(package)">Upload</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-------------------------------
+	// Upload apk modal
+-------------------------------->
+<!-- <nz-modal [(nzVisible)]="isVisible" nzTitle="The first Modal" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"> -->
+<nz-modal [(nzVisible)]="isVisible" nzTitle="Upload Path" (nzOnCancel)="handleCancel()" [nzFooter]="uploadedPathFooter" [nzCloseIcon]="modalCloseIcon">
+    <ng-container *nzModalContent>
+        <input type="text" [value]="isPackageInfo?.package_id" [(ngModel)]="packageIdModel"><br>
+        <input type="file" id="file" (change)="onSelectedFile($event)">
+        <button class="main-btn" (click)="handleUpload()">Continue <i class="flaticon-right-arrows"></i></button>
+        <form [formGroup]="packageUploadForm" (ngSubmit)="handleUpload()" *ngIf="!uploading">
+            <div class="custom-input">
+                <div class="custom-input__label">
+                    <label for="" class="custom-input__label">Package Name</label>
+                </div>
+                <div class="custom-input__group">
+                    <div class="custom-input__append"><i class="flaticon-envelope"></i></div>
+                    <input type="text" class="custom-input__field" placeholder="Email" [value]="isPackageInfo?.package_name" formControlName="name" readonly>
+                </div>
+            </div>
+            <div class="custom-input mb-0">
+                <div class="custom-input__label">
+                    <label for="" class="custom-input__label">Upload File</label>
+                </div>
+                <nz-upload nzType="drag" [nzMultiple]="false" nzListType="picture" [(nzFileList)]="fileList" [nzFileListRender]="customIcon" nzLimit="1" [nzBeforeUpload]="beforeFileUpload">
+                    <p class="ant-upload-drag-icon">
+                        <i class="flaticon-information-button"></i>
+                    </p>
+                    <p class="ant-upload-text">Click or Drag file here</p>
+                    <p class="ant-upload-hint">Support apk file only</p>
+                    <ng-template #customIcon>
+                        <div class="uploaded-preview" *ngIf="fileList[0]">
+                            <div class="uploaded-preview__info">
+                                <i class="flaticon-attachment"></i>
+                                <p>{{fileList[0]?.name}}</p>
+                                <div class="uploaded-preview__delete" (click)="removeUploadedFile()">
+                                    <i class="flaticon-trash"></i>
+                                </div>
+                            </div>
+                            <!-- <h2 style="transition: all 0.3s ease;">{{isProgressWidth}}</h2>
+                            <div class="progress">
+                                <div class="progress-inner" [style.width]="isProgressWidth"></div>
+                            </div> -->
+                            <!-- <nz-progress [nzPercent]="isProgressWidth"></nz-progress> -->
+                        </div>
+                    </ng-template>
+                </nz-upload>
+                <!-- <input type="file" name="pathFile" (change)="onSelectedFile($event)">
+                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
+                    <button nz-button>
+					  <i nz-icon nzType="upload"></i>
+					  Select File
+					</button>
+                </nz-upload>
+                <button nz-button [nzType]="'primary'" [nzLoading]="uploading" (click)="handleUpload()" [disabled]="fileList.length === 0" style="margin-top: 16px">
+					{{ uploading ? 'Uploading' : 'Start Upload' }}
+				  </button> -->
+            </div>
+
+        </form>
+        <div class="path-uploading__status" *ngIf="!uploading">
+            <div class="path-uploading__animation">
+                <nz-progress [nzPercent]="isProgressWidth" nzType="circle"></nz-progress>
+            </div>
+            <p>{{fileUploadMessage}}</p>
+        </div>
+    </ng-container>
+</nz-modal>
+<ng-template #modalCloseIcon>
+    <i class="flaticon-close"></i>
+</ng-template>
+<ng-template #uploadedPathFooter>
+    <div class="modal-footer">
+        <div class="modal-footer__buttons">
+            <button class="main-btn main-btn__orange">Cancel</button>
+            <button class="main-btn" (click)="handleUpload()" [disabled]="!packageUploadForm.invalid">Submit</button>
+        </div>
+    </div>
+</ng-template>

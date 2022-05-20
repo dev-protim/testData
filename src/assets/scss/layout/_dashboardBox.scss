@@ -1,0 +1,35 @@
+@use '../abstracts/index' as abstract;
+
+/********************************************
+ * Dashboard box styles
+ ********************************************/
+
+.dashboard {
+    &-box {
+        &__header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            @include abstract.margin(null, null, 20, null);
+            .dashboard-box__header--title {
+                @include abstract.margin(null, 10, 9, null);
+                h3 {
+                    @include abstract.font-size-em(18);
+                }
+                p {
+                    @include abstract.font-size-em(14);
+                }
+            }
+            .main-btn {
+                @include abstract.margin(null, null, 9, null);
+            }
+        }
+        &__body {
+            @include abstract.padding(15, 18, 15, 18);
+            @include abstract.box-shadow(0, 5, 17, 4, rgba(abstract.$grayColor, 0.16), null);
+            border-radius: 5px;
+            background-color: var(--theme-bg);
+        }
+    }
+}

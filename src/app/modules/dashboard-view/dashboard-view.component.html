@@ -1,0 +1,10 @@
+<div class="dashboard-section">
+    <app-side-nav [navCollapsed]="isSideNav"></app-side-nav>
+    <div class="dashboard-body">
+        <app-dashboard-header (isToggleCollapse)="toggleSideNav($event)"></app-dashboard-header>
+        <router-outlet></router-outlet>
+        <!-- <div class="dashboard-footer">
+            <p>Copyright 2022 © Track theme by Yotech</p>
+        </div> -->
+    </div>
+</div>

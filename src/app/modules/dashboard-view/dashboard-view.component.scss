@@ -1,0 +1,54 @@
+@use 'variables' as abstract;
+@use 'mixins' as *;
+
+/**********************************
+ * Dashboard view styles
+**********************************/
+
+.dashboard {
+    &-section {
+        overflow: hidden;
+        display: flex;
+        height: 100%;
+        position: relative;
+        &:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 400px;
+            height: 310px;
+            background-image: url("../../../assets/img/dashboard-view-shape.png");
+            background-size: 100% 100%;
+            background-position: top left;
+            background-repeat: no-repeat;
+            z-index: -1;
+        }
+        @include respond-to(medium) {
+            padding-left: var(--side-nav-width);
+        }
+        @include respond-to(large) {
+            &:before {
+                width: 575px;
+                height: 390px;
+            }
+        }
+    }
+    &-body {
+        flex: 1;
+        -ms-flex: 1;
+        width: 100%;
+        @include padding(50,
+        15,
+        null,
+        15);
+        @include respond-to(medium) {
+            @include padding(0,
+            30,
+            null,
+            30);
+            flex: 0 0 auto;
+            width: calc(100% - var(--history-panel-width) + 25px);
+        }
+    }
+}

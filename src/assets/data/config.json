@@ -1,0 +1,17 @@
+{
+    "platform_id": "1",
+    "bdom": "./assets/json-files",
+    "idom": "yofoodie.co.uk",
+    "domain": "yolauncher.orderpoz.co.uk",
+    "indty": 18,
+    "short_name": "yolauncher",
+    "request": 1,
+    "app_module_id": "0",
+    "currency_symbol": "£",
+    "currency_code": "GBP",
+    "country_id": "1",
+    "country_code": "gb",
+    "country_calling_code": "+44",
+    "serverType": "dev",
+    "promotionalSms": true
+}

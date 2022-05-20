@@ -1,0 +1,28 @@
+@use 'variables' as abstract;
+@use 'mixins' as *;
+
+/**********************************
+ * Dashboard page styles
+**********************************/
+
+.dashboard {
+    &-page {
+        &__header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            @include padding(20, null, 30, null);
+            @include margin(-11.5, null, null, null);
+            &>* {
+                @include margin(11.5, null, null, null);
+                &:first-child {
+                    @include margin(null, 15, null, null);
+                }
+            }
+            .main-btn {
+                flex: 0 0 auto;
+            }
+        }
+    }
+}

@@ -10,6 +10,10 @@ export class LoginComponent implements OnInit {
 	binding: any;
 	fixedWidth: any;
 	fixedLeft: any;
+	phoneNumber: any;
+	isEmail: boolean = true;
+	isPhone: boolean = false;
+	istextView: boolean = false;
 
 	constructor() { }
 
@@ -17,6 +21,10 @@ export class LoginComponent implements OnInit {
 		this.bannerPosition();
 	}
 
+	/**
+	 * @author | Pranto Protim Roy
+	 * @description Get banner position according to screen resize
+	 */
 	@HostListener('window:resize', ['$event'])
 	onResize(event: any) {
 		this.bannerPosition();
@@ -30,6 +38,36 @@ export class LoginComponent implements OnInit {
 		this.fixedWidth = containerWidth;
 		this.fixedLeft = containerLeft;
 		console.log(this.fixedWidth, this.fixedLeft);
+	}
+
+	/**
+	 * @author | Pranto Protim Roy
+	 * @description Authentication medium change event
+	 */
+	changeAuthMedium(medium: string): void {
+		if (medium === 'email') {
+			this.isEmail = true;
+			this.isPhone = false;
+		} else {
+			this.isEmail = false;
+			this.isPhone = true;
+		}
+	}
+
+	/**
+	 * @author | Pranto Protim Roy
+	 * @description Toggle password view
+	 */
+	togglePasswordView(): void {
+		const password: any = document.querySelector("input.password") as HTMLElement;
+		// const eye = document.querySelector(".eye") as HTMLElement;
+		if (password.type === 'password') {
+			password.type = 'text';
+			this.istextView = true;
+		} else {
+			password.type = 'password';
+			this.istextView = false;
+		}
 	}
 
 }

@@ -1,16 +1,37 @@
-@use 'index' as abstract;
+@use 'variables' as abstract;
+@use 'mixins' as *;
 .authentication {
     &-section {
         min-height: 100%;
         position: relative;
         &:before {
             content: "";
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
-            width: 50%;
-            height: 100%;
+            width: 100%;
+            height: 50%;
             background-color: abstract.$primaryColor;
+            border-radius: 0 0 30px 30pz;
+            background-image: url(../../../assets/img/authentication/authentication-bg.png);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: top center;
+            @include respond-to(small) {
+                width: 50%;
+                height: 100%;
+                border-radius: 0 30px 30px 0;
+                background-position: top right;
+            }
+            @include respond-to(x-large) {
+                background-image: url(../../../assets/img/authentication/authentication-bg-x.png);
+            }
+        }
+        .container-fluid {
+            height: 100vh;
+            .row {
+                height: 100%;
+            }
         }
     }
     &-banner {
@@ -19,16 +40,71 @@
         justify-content: center;
         height: 100vh;
         position: fixed;
+        top: 0;
         img {
-            max-width: 450px;
+            max-width: 250px;
+        }
+        @include respond-to(large) {
+            img {
+                max-width: 450px;
+            }
         }
     }
     &-content {
-        padding: 100px;
+        padding: 40px 35px;
         text-align: center;
+        max-width: 560px;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #fff;
+        z-index: 11;
+        position: relative;
+        height: auto;
+        transform: translate(0, 33%);
+        border-radius: 20px;
+        @include box-shadow(0, 6, 17, 0.1, rgba(abstract.$grayColor, 0.07), important);
         &>img {
             max-width: 85px;
-            margin-bottom: 1.6em;
+            margin-bottom: 2em;
+        }
+        h2 {
+            @include font-size-em(32);
+        }
+        form {
+            @include margin(15, null, null, null);
+            text-align: left;
+            width: 100%;
+            // .main-btn {
+            //     margin-top: 0.4em;
+            // }
+        }
+        @include respond-to(small) {
+            padding: 100px 30px;
+            height: 100%;
+            transform: translate(0, 0);
+            border-radius: 0;
+            @include box-shadow(0, 0, 0, 0, transparent, important);
+            &>img {
+                max-width: 110px;
+                margin-bottom: 2.5em;
+            }
+            form {
+                @include margin(35, null, null, null);
+            }
+        }
+        @include respond-to(x-large) {
+            padding: 100px 0;
+            form {
+                @include margin(21, null, null, null);
+            }
         }
     }
 }
+
+// .custom-input {
+//     @include margin(null, null, 20, null);
+// }
