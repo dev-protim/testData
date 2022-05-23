@@ -4,7 +4,7 @@
     <!-- Dashboard info starts -->
     <div class="dashboard-page__header s-margin-bottom">
         <app-dashboard-basic-info></app-dashboard-basic-info>
-        <button class="main-btn">Add New Package</button>
+        <button class="main-btn" (click)="openUploadModal()">Add New Package</button>
     </div>
     <!-- Dashboard info ends -->
     <!-- Dashboard package starts -->
@@ -13,3 +13,109 @@
     </div>
     <!-- Dashboard package ends -->
 </div>
+
+<!-------------------------------
+	// Upload apk modal
+-------------------------------->
+<nz-modal [(nzVisible)]="isPackageModal" nzTitle="Create a Package" (nzOnCancel)="closeModal()" [nzFooter]="createPackageFooter" [nzCloseIcon]="modalCloseIcon">
+    <ng-container *nzModalContent>
+        <form [formGroup]="packageUploadForm" (ngSubmit)="handleSubmit()" *ngIf="!uploading">
+            <div class="custom-input">
+                <div class="custom-input__label">
+                    <label for="" class="custom-input__label">Package Name</label>
+                </div>
+                <div class="custom-input__group">
+                    <input type="text" class="custom-input__field" placeholder="Package name" formControlName="name">
+                </div>
+                <p *ngIf="packageUploadForm.get('name').invalid && (packageUploadForm.get('name').dirty || packageUploadForm.get('name').touched)" class="custom-input__error">
+                    Please provide a name
+                </p>
+            </div>
+            <div class="custom-input">
+                <div class="custom-input__label">
+                    <label for="" class="custom-input__label">Status</label>
+                </div>
+                <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" nzDropdownClassName="select-dropdown" formControlName="status" nzPlaceHolder="Select status">
+                    <nz-option *ngFor="let item of packageStatus" [nzLabel]="item" [nzValue]="item"></nz-option>
+                </nz-select>
+                <p *ngIf="packageUploadForm.get('status').invalid && (packageUploadForm.get('status').dirty || packageUploadForm.get('status').touched)" class="custom-input__error">
+                    Please select one
+                </p>
+            </div>
+            <div class="custom-input">
+                <div class="custom-input__label">
+                    <label for="" class="custom-input__label">Type</label>
+                </div>
+                <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" nzDropdownClassName="select-dropdown" formControlName="type" nzPlaceHolder="Select type">
+                    <nz-option *ngFor="let item of packageType" [nzLabel]="item" [nzValue]="item"></nz-option>
+                </nz-select>
+                <p *ngIf="packageUploadForm.get('type').invalid && (packageUploadForm.get('type').dirty || packageUploadForm.get('type').touched)" class="custom-input__error">
+                    Please select one
+                </p>
+            </div>
+            <div class="custom-input">
+                <div class="custom-input__label">
+                    <label for="" class="custom-input__label">Installed</label>
+                </div>
+                <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" nzDropdownClassName="select-dropdown" formControlName="isInstalled" nzPlaceHolder="Select type">
+                    <nz-option *ngFor="let item of isInstalled" [nzLabel]="item" [nzValue]="item"></nz-option>
+                </nz-select>
+                <p *ngIf="packageUploadForm.get('isInstalled').invalid && (packageUploadForm.get('isInstalled').dirty || packageUploadForm.get('isInstalled').touched)" class="custom-input__error">
+                    Please select one
+                </p>
+            </div>
+            <ng-template #arrowIcon>
+                <i class="flaticon-down-arrow"></i>
+            </ng-template>
+            <div class="custom-input mb-0">
+                <div class="custom-input__label">
+                    <label for="" class="custom-input__label">Upload File</label>
+                </div>
+                <nz-upload nzType="drag" [nzMultiple]="false" nzListType="picture" [(nzFileList)]="fileList" [nzFileListRender]="customIcon" nzLimit="1" [nzBeforeUpload]="beforeFileUpload">
+                    <p class="ant-upload-drag-icon">
+                        <i class="flaticon-information-button"></i>
+                    </p>
+                    <p class="ant-upload-text">Click or Drag file here</p>
+                    <p class="ant-upload-hint">Support apk file only</p>
+                    <ng-template #customIcon>
+                        <div class="uploaded-preview" *ngIf="fileList[0]">
+                            <div class="uploaded-preview__info">
+                                <i class="flaticon-attachment"></i>
+                                <p>{{fileList[0]?.name}}</p>
+                                <div class="uploaded-preview__delete" (click)="removeUploadedFile()">
+                                    <i class="flaticon-trash"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </nz-upload>
+            </div>
+
+        </form>
+        <div class="path-uploading__status" *ngIf="uploading">
+            <div class="path-uploading__animation">
+                <nz-progress [nzPercent]="isProgressWidth" nzType="circle" [nzStatus]="progressStatus"></nz-progress>
+            </div>
+            <p>{{fileUploadMessage}}</p>
+        </div>
+    </ng-container>
+</nz-modal>
+<ng-template #modalCloseIcon>
+    <i class="flaticon-close"></i>
+</ng-template>
+<ng-template #createPackageFooter>
+    <div class="modal-footer">
+        <div class="modal-footer__buttons" *ngIf="!isUploadedStatus">
+            <button class="main-btn main-btn__orange" (click)="closeModal()">Cancel</button>
+            <button class="main-btn" (click)="handleSubmit()" [disabled]="packageUploadForm.invalid">Submit</button>
+        </div>
+        <div class="modal-footer__buttons" *ngIf="isUploadedStatus">
+            <button class="main-btn" (click)="backToUploadForm()">Back</button>
+            <button class="main-btn main-btn__orange" (click)="closeModal()">Close</button>
+        </div>
+    </div>
+</ng-template>
+
+<!-------------------------------
+	// Update package info modal
+-------------------------------->

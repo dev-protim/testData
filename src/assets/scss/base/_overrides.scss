@@ -113,22 +113,32 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        @include abstract.margin(null, null, 17, null);
+        @include abstract.margin(null, null, 14, null);
         margin-inline: auto;
         i {
             color: abstract.$primaryColor;
             @include abstract.font-size-em(21);
             line-height: 1px;
         }
+        @include abstract.respond-to(small) {
+            @include abstract.margin(null, null, 17, null);
+        }
     }
     p.ant-upload-text {
-        @include abstract.margin(null, null, 3, null);
-        @include abstract.font-size-em(19);
+        @include abstract.margin(null, null, 2, null);
+        @include abstract.font-size-em(17);
         @include abstract.font-weight(500);
+        @include abstract.respond-to(small) {
+            @include abstract.font-size-em(19);
+            @include abstract.margin(null, null, 3, null);
+        }
     }
     p.ant-upload-hint {
-        @include abstract.font-size-em(15);
+        @include abstract.font-size-em(14);
         color: rgba(#0a1125, 0.5);
+        @include abstract.respond-to(small) {
+            @include abstract.font-size-em(15);
+        }
     }
 }
 
@@ -213,6 +223,9 @@
     &-body {
         @include abstract.padding(13, 20, 13, 20);
         font-size: 1em;
+        max-height: 585px;
+        @include abstract.scrollbar(5px, abstract.$grayColor, transparent);
+        overflow: auto;
     }
     &-footer {
         @include abstract.padding(13, 20, 13, 20);
@@ -230,4 +243,88 @@
 }
 
 // Modal ends
+// Select starts
+.ant-select.custom-input__group {
+    padding: 0;
+    @include abstract.font-size-em(15);
+    &::placeholder {
+        color: abstract.$grayColor;
+    }
+    &::-moz-placeholder {
+        color: abstract.$grayColor;
+    }
+    &:-ms-input-placeholder {
+        color: abstract.$grayColor;
+    }
+    &::-webkit-input-placeholder {
+        color: abstract.$grayColor;
+    }
+    .ant-select-selector {
+        padding: var(--input-btn-padding);
+    }
+}
+
+.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+    height: 100%;
+}
+
+.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    border-color: transparent;
+    box-shadow: none;
+    border-right-width: 0;
+}
+
+.ant-select-arrow {
+    color: var(--text-color);
+    @include abstract.font-size-em(18);
+    right: 14px;
+}
+
+.ant-select-single .ant-select-selector .ant-select-selection-item {
+    line-height: 20px;
+    @include abstract.respond-to(small) {
+        line-height: 24px;
+    }
+}
+
+.select-dropdown {
+    .ant-select-dropdown {
+        margin: 0;
+        border-radius: 5px;
+        margin-top: 1px;
+    }
+}
+
+.ant-select-item {
+    @include abstract.padding(5, 15, 5, 15);
+    @include abstract.font-size-em(15);
+    color: var(--text-color);
+}
+
+.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+    background-color: transparent;
+    color: abstract.$primaryColor;
+}
+
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+    background-color: transparent;
+    color: abstract.$primaryColor;
+}
+
+.ant-select-single.ant-select-open .ant-select-selection-item {
+    color: rgba(#0a1125, 0.5);
+}
+
+.ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder {
+    color: abstract.$grayColor;
+    line-height: 20px;
+    @include abstract.respond-to(small) {
+        line-height: 24px;
+    }
+}
+
+// Select ends
 // Ng zorro ends here

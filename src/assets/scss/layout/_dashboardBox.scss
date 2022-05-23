@@ -12,7 +12,7 @@
             justify-content: space-between;
             flex-wrap: wrap;
             @include abstract.margin(null, null, 20, null);
-            .dashboard-box__header--title {
+            &--title {
                 @include abstract.margin(null, 10, 9, null);
                 h3 {
                     @include abstract.font-size-em(18);
@@ -24,12 +24,31 @@
             .main-btn {
                 @include abstract.margin(null, null, 9, null);
             }
+            &--buttons {
+                .main-btn {
+                    &:not(:last-child) {
+                        @include abstract.margin(null, 15, null, null);
+                    }
+                }
+            }
         }
         &__body {
             @include abstract.padding(15, 18, 15, 18);
             @include abstract.box-shadow(0, 5, 17, 4, rgba(abstract.$grayColor, 0.16), null);
             border-radius: 5px;
             background-color: var(--theme-bg);
+        }
+        &__empty {
+            text-align: center;
+            @include abstract.padding(15, 18, 15, 18);
+            img {
+                max-width: 70px;
+                @include abstract.margin(null, null, 10, null);
+            }
+            p {
+                color: var(--text-color);
+                @include abstract.font-size-em(14);
+            }
         }
     }
 }

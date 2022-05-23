@@ -54,8 +54,12 @@ textarea {
             width: 16px;
             text-align: center;
             i {
-                line-height: 1px;
                 vertical-align: middle;
+            }
+            @include abstract.respond-to(small) {
+                i {
+                    line-height: 1px;
+                }
             }
         }
         // For prepend icon inside input group
@@ -72,6 +76,11 @@ textarea {
             &:not(:last-child) {
                 @include abstract.margin(null, 12, null, null);
             }
+        }
+        &__error {
+            @include abstract.margin(5, null, null, null);
+            @include abstract.font-size-em(14);
+            color: #CE2D4F;
         }
     }
 }

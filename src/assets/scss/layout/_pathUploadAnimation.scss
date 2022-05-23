@@ -1,0 +1,9 @@
+// Path uploading status
+.path-uploading {
+    &__status {
+        text-align: center;
+        p {
+            color: var(--text-color);
+        }
+    }
+}

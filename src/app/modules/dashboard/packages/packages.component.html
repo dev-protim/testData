@@ -4,10 +4,13 @@
             <h3>All Packages</h3>
             <p>Lorem ipsum dolor sit amet consectetur </p>
         </div>
-        <button class="main-btn">Create Package</button>
+        <div class="dashboard-box__header--buttons">
+            <!-- <button class="main-btn">Create Package</button> -->
+            <button class="main-btn" (click)="openPathValidationModal()">Check Paths</button>
+        </div>
     </div>
     <div class="dashboard-box__body">
-        <div class="dashboard-table">
+        <div class="dashboard-table" *ngIf="packageList?.length !== 0">
             <table>
                 <thead>
                     <tr>
@@ -34,7 +37,7 @@
                         </td>
                         <td>
                             <div class="dashboard-table__buttons">
-                                <button class="main-btn">Update</button>
+                                <button class="main-btn" (click)="openUpdateModal(package)">Update</button>
                                 <button class="main-btn main-btn__border" (click)="openUploadModal(package)">Upload</button>
                             </div>
                         </td>
@@ -42,25 +45,25 @@
                 </tbody>
             </table>
         </div>
+        <div class="dashboard-box__empty" *ngIf="packageList?.length === 0">
+            <img src="assets/img/empty.png" alt="Empty">
+            <p>No data found</p>
+        </div>
     </div>
 </div>
 
 <!-------------------------------
 	// Upload apk modal
 -------------------------------->
-<!-- <nz-modal [(nzVisible)]="isVisible" nzTitle="The first Modal" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"> -->
-<nz-modal [(nzVisible)]="isVisible" nzTitle="Upload Path" (nzOnCancel)="handleCancel()" [nzFooter]="uploadedPathFooter" [nzCloseIcon]="modalCloseIcon">
+<nz-modal [(nzVisible)]="isPathModalVisible" nzTitle="Upload Path" (nzOnCancel)="closeUploadModal()" [nzFooter]="uploadedPathFooter" [nzCloseIcon]="modalCloseIcon">
     <ng-container *nzModalContent>
-        <!-- <input type="text" [value]="isPackageInfo?.package_id" [(ngModel)]="packageIdModel"><br>
-        <input type="file" id="file" (change)="onSelectedFile($event)">
-        <button class="main-btn" (click)="handleUpload()">Continue <i class="flaticon-right-arrows"></i></button> -->
         <form [formGroup]="packageUploadForm" (ngSubmit)="handleUpload()" *ngIf="!uploading">
             <div class="custom-input">
                 <div class="custom-input__label">
                     <label for="" class="custom-input__label">Package Name</label>
                 </div>
                 <div class="custom-input__group">
-                    <div class="custom-input__append"><i class="flaticon-envelope"></i></div>
+                    <div class="custom-input__append"><i class="flaticon-add"></i></div>
                     <input type="text" class="custom-input__field" placeholder="Email" [value]="isPackageInfo?.package_name" formControlName="name" readonly>
                 </div>
             </div>
@@ -83,30 +86,15 @@
                                     <i class="flaticon-trash"></i>
                                 </div>
                             </div>
-                            <!-- <h2 style="transition: all 0.3s ease;">{{isProgressWidth}}</h2>
-                            <div class="progress">
-                                <div class="progress-inner" [style.width]="isProgressWidth"></div>
-                            </div> -->
-                            <!-- <nz-progress [nzPercent]="isProgressWidth"></nz-progress> -->
                         </div>
                     </ng-template>
                 </nz-upload>
-                <!-- <input type="file" name="pathFile" (change)="onSelectedFile($event)">
-                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
-                    <button nz-button>
-					  <i nz-icon nzType="upload"></i>
-					  Select File
-					</button>
-                </nz-upload>
-                <button nz-button [nzType]="'primary'" [nzLoading]="uploading" (click)="handleUpload()" [disabled]="fileList.length === 0" style="margin-top: 16px">
-					{{ uploading ? 'Uploading' : 'Start Upload' }}
-				  </button> -->
             </div>
 
         </form>
         <div class="path-uploading__status" *ngIf="uploading">
             <div class="path-uploading__animation">
-                <nz-progress [nzPercent]="isProgressWidth" nzType="circle"></nz-progress>
+                <nz-progress [nzPercent]="isProgressWidth" nzType="circle" [nzStatus]="progressStatus"></nz-progress>
             </div>
             <p>{{fileUploadMessage}}</p>
         </div>
@@ -117,9 +105,88 @@
 </ng-template>
 <ng-template #uploadedPathFooter>
     <div class="modal-footer">
-        <div class="modal-footer__buttons">
-            <button class="main-btn main-btn__orange">Cancel</button>
+        <div class="modal-footer__buttons" *ngIf="!isUploadedStatus">
+            <button class="main-btn main-btn__orange" (click)="closeUploadModal()">Cancel</button>
             <button class="main-btn" (click)="handleUpload()" [disabled]="!packageUploadForm.invalid">Submit</button>
+        </div>
+        <div class="modal-footer__buttons" *ngIf="isUploadedStatus">
+            <button class="main-btn" (click)="backToUploadForm()">Back</button>
+            <button class="main-btn main-btn__orange" (click)="closeUploadModal()">Close</button>
+        </div>
+    </div>
+</ng-template>
+
+<!-------------------------------
+	// Update package info modal
+-------------------------------->
+
+<nz-modal [(nzVisible)]="isUpdateModalVisible" nzTitle="Update Information" (nzOnCancel)="closeUpdateModal()" [nzFooter]="updatedPackageFooter" [nzCloseIcon]="updateModalCloseIcon">
+    <ng-container *nzModalContent>
+        <form [formGroup]="packageUpdateForm" (ngSubmit)="handleUpdate()">
+            <div class="custom-input">
+                <div class="custom-input__label">
+                    <label for="" class="custom-input__label">Package Name</label>
+                </div>
+                <div class="custom-input__group">
+                    <div class="custom-input__append"><i class="flaticon-add"></i></div>
+                    <input type="text" class="custom-input__field" [value]="isPackageInfo?.package_name" formControlName="name" readonly>
+                </div>
+            </div>
+            <div class="custom-input">
+                <div class="custom-input__label">
+                    <label for="" class="custom-input__label">Package Type</label>
+                </div>
+                <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" nzDropdownClassName="select-dropdown" formControlName="type">
+                    <nz-option *ngFor="let item of packageType" [nzLabel]="item" [nzValue]="item"></nz-option>
+                </nz-select>
+            </div>
+            <div class="custom-input mb-0">
+                <div class="custom-input__label">
+                    <label for="" class="custom-input__label">Package Status</label>
+                </div>
+                <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" nzDropdownClassName="select-dropdown" formControlName="status">
+                    <nz-option *ngFor="let item of packageStatus" [nzLabel]="item" [nzValue]="item"></nz-option>
+                </nz-select>
+            </div>
+            <ng-template #arrowIcon>
+                <i class="flaticon-down-arrow"></i>
+            </ng-template>
+        </form>
+    </ng-container>
+</nz-modal>
+<ng-template #updateModalCloseIcon>
+    <i class="flaticon-close"></i>
+</ng-template>
+<ng-template #updatedPackageFooter>
+    <div class="modal-footer">
+        <div class="modal-footer__buttons">
+            <button class="main-btn main-btn__orange" (click)="closeUpdateModal()">Cancel</button>
+            <button class="main-btn" (click)="handleUpdate()">Save</button>
+        </div>
+    </div>
+</ng-template>
+
+<!-------------------------------
+	// Check path exist modal
+-------------------------------->
+
+<nz-modal [(nzVisible)]="isPathAvailableModal" nzTitle="Check Paths" (nzOnCancel)="closePathValidationModal()" [nzFooter]="pathCheckFooter" [nzCloseIcon]="pathModalCloseIcon">
+    <ng-container *nzModalContent>
+        <div class="modal-body">
+            <p>No path found for these packages:</p>
+            <ul>
+                <li *ngFor="let item of noPathPackageList">{{item.package_name}}</li>
+            </ul>
+        </div>
+    </ng-container>
+</nz-modal>
+<ng-template #pathModalCloseIcon>
+    <i class="flaticon-close"></i>
+</ng-template>
+<ng-template #pathCheckFooter>
+    <div class="modal-footer">
+        <div class="modal-footer__buttons">
+            <button class="main-btn" (click)="closePathValidationModal()">Close</button>
         </div>
     </div>
 </ng-template>

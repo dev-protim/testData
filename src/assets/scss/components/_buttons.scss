@@ -34,6 +34,7 @@ button {
         transition: transform 0.2s cubic-bezier(0.4, 0.29, 0.19, 0.46);
     }
     &:hover {
+        background-color: abstract.$primaryColorDark;
         i {
             transform: translateX(10px);
         }

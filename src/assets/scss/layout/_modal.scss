@@ -5,6 +5,31 @@
  ********************************************/
 
 .modal {
+    &-body {
+        padding: 0;
+        p {
+            @include abstract.font-size-em(15);
+            color: var(--text-color);
+            @include abstract.margin(null, null, 10, null);
+        }
+        ul {
+            li {
+                list-style: none;
+                @include abstract.font-size-em(15);
+                @include abstract.margin(null, null, 4, null);
+                &:last-child {
+                    margin-bottom: 0;
+                }
+                color: var(--text-color);
+                &:before {
+                    content: "•";
+                    line-height: 1;
+                    @include abstract.font-size-em(17);
+                    @include abstract.margin(null, 8, null, null);
+                }
+            }
+        }
+    }
     &-footer {
         &__buttons {
             .main-btn {
@@ -16,6 +41,9 @@
                     min-width: 100px;
                     height: 43px;
                 }
+                width: 85px;
+                min-width: 85px;
+                height: 38px;
             }
         }
     }

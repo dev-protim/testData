@@ -1,13 +1,18 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpEventType, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, of, tap } from 'rxjs';
+import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { Package } from 'src/app/modules/dashboard/packages/package.class';
 import { ConfigService } from '../config/config.service';
+// throwError
+// catchError
+// map
 
 @Injectable({
 	providedIn: 'root'
 })
 export class ApiCallService {
+
+	url: any = "https://jsonplaceholder.typicode.com/posts";
 
 	constructor(private httpClient: HttpClient,
 		private config: ConfigService) { }
@@ -16,6 +21,10 @@ export class ApiCallService {
 		headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 	};
 
+	/**
+	 * @author | Pranto
+	 * @description | Get all packages
+	 */
 	getPackages(): Observable<Package[]> {
 		const url = this.config.rootURL + "/all_packages.json";
 		return this.httpClient.get<Package[]>(url)
@@ -23,6 +32,42 @@ export class ApiCallService {
 				tap(_ => this.log('fetched packages')),
 				catchError(this.handleError<Package[]>('getPackages', []))
 			);
+	}
+
+	/**
+	 * @author | Pranto
+	 * @description | Upload apk path in package list
+	 */
+	uploadPackagePath(formData: any, isProgressWidth: any, fileUploadMessage: any, progressStatus: any): any {
+		return this.httpClient.post(`${this.url}`, formData, {
+			reportProgress: true,
+			observe: "events"
+		})
+		.pipe(map(
+			(event: any) => {
+				if (event.type === HttpEventType.UploadProgress) {
+					isProgressWidth = Math.round(100 * event.loaded / event.total);
+					// console.log(this.isProgressWidth)
+				}
+				else if (event.type === HttpEventType.Response) {
+					isProgressWidth = 100;
+				}
+			}
+		))
+		.subscribe(
+			res => {
+				fileUploadMessage = "Your file is uploading...";
+				progressStatus = "normal";
+			},
+			error => {
+				fileUploadMessage = "There is an error with your file upload.";
+				progressStatus = "exception";
+			},
+			() => {
+				fileUploadMessage = "Your file uploaded successfully!";
+				progressStatus = "success";
+			}
+		)
 	}
 
 	/**
@@ -49,6 +94,5 @@ export class ApiCallService {
 	/** Log a HeroService message with the MessageService */
 	private log(message: string) {
 		console.log("From log:", message);
-		// this.messageService.add(`HeroService: ${message}`);
 	}
 }
