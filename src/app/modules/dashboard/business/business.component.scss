@@ -1,0 +1,12 @@
+.dashboard {
+    &-table {
+        table {
+            th,
+            td {
+                &:last-child {
+                    width: 120px;
+                }
+            }
+        }
+    }
+}

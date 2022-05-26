@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders, HttpEventType, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
+import { Business, Devices } from 'src/app/modules/dashboard/business/business';
 import { Package } from 'src/app/modules/dashboard/packages/package.class';
 import { ConfigService } from '../config/config.service';
 // throwError
@@ -68,6 +69,27 @@ export class ApiCallService {
 				progressStatus = "success";
 			}
 		)
+	}
+
+	/**
+	 * @author | Pranto
+	 * @description | Get all business
+	 */
+	getBusiness(): Observable<Business> {
+		// const url = this.config.rootURL + "/business_info.json";
+		const url = "https://e837-103-113-175-2.ngrok.io/launcher/admin/business";
+		return this.httpClient.get<Business>(url)
+			.pipe(
+				tap(_ => this.log('fetched businesses')),
+				catchError(this.handleError<Business>('getBusinesses'))
+			);
+	}
+
+	getDeviceDetails(id: string) {
+		const url = this.config.rootURL + "/business_info.json";
+		return this.httpClient.get<Devices>(url).pipe(map((device: any) => {
+			return device.data.filter((device: any) => device.business_id === id)[0];
+		}))
 	}
 
 	/**

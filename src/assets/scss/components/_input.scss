@@ -10,6 +10,7 @@ textarea {
     @include abstract.placeholder;
     border: none;
     padding: 0;
+    background-color: transparent;
     &:focus {
         outline: none;
     }
@@ -80,7 +81,7 @@ textarea {
         &__error {
             @include abstract.margin(5, null, null, null);
             @include abstract.font-size-em(14);
-            color: #CE2D4F;
+            color: abstract.$danger;
         }
     }
 }

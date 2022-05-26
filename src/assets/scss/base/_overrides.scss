@@ -269,6 +269,7 @@
     border-radius: 0;
     background-color: transparent;
     height: 100%;
+    width: 100%;
 }
 
 .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
@@ -327,4 +328,90 @@
 }
 
 // Select ends
+// Pagination starts
+.ant-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    @include abstract.margin(12, null, null, null);
+    @include abstract.padding(17, 12, null, 12);
+    border-top: 1px solid rgba(abstract.$grayColor, 0.42);
+    @include abstract.font-size-em(15);
+    li {
+        color: var(--text-color);
+        @include abstract.font-size-em(14);
+        height: auto;
+        line-height: 1;
+        &:not(.ant-pagination-total-text) {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            border: 0;
+            text-align: center;
+            width: 25px;
+            height: 25px;
+            flex: 0 0 auto;
+            transition: all 0.3s linear;
+            &:hover {
+                background-color: rgba(abstract.$primaryColor, 0.07);
+                border-radius: 3px
+            }
+            &.ant-pagination-item {
+                min-width: 20px;
+                @include abstract.margin(null, 5, null, null);
+                &-active {
+                    background-color: abstract.$primaryColor;
+                    color: var(--theme-bg);
+                    &:hover {
+                        background-color: abstract.$primaryColor;
+                        color: var(--theme-bg);
+                    }
+                }
+            }
+        }
+        &:nth-last-child(2) {
+            margin-right: 0 !important;
+        }
+    }
+    &-prev {
+        min-width: 25px;
+        @include abstract.margin(null, 8, null, null);
+        i {
+            @include abstract.font-size-em(20);
+            line-height: 1px;
+        }
+    }
+    &-next {
+        min-width: 25px;
+        @include abstract.margin(null, null, null, 8);
+        i {
+            @include abstract.font-size-em(20);
+            line-height: 1px;
+            position: relative;
+            top: 1px;
+        }
+    }
+    &-jump-prev {
+        min-width: 25px;
+        @include abstract.margin(null, 8, null, null);
+    }
+    &-jump-next {
+        min-width: 25px;
+        @include abstract.margin(null, 8, null, null);
+    }
+    &-total-text {
+        margin-right: auto;
+        @include abstract.padding(null, 10, null, null);
+        height: auto;
+    }
+    &-disabled {
+        opacity: 0.5;
+        &:hover {
+            background-color: transparent !important;
+        }
+    }
+}
+
+// Pagination ends
 // Ng zorro ends here

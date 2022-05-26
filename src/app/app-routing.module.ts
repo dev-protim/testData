@@ -7,6 +7,7 @@ const routes: Routes = [
     path: '', loadChildren: () => import('./modules/login/login.module').then(m => m.LoginModule)
   },
   { path: 'dashboard', loadChildren: () => import('./modules/dashboard-view/dashboard-view.module').then(m => m.DashboardViewModule) },
+//   { path: 'event', loadChildren: () => import('./modules/event/event.module').then(m => m.EventModule) },
   { path: '**', component: NotFoundComponent }
 ];
 

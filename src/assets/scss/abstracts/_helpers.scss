@@ -25,8 +25,8 @@
 }
 
 .s-margin-bottom {
-    @include margin(null, null, 20, null);
+    @include margin(null, null, 30, null);
     @include respond-to(medium) {
-        @include margin(null, null, 30, null);
+        @include margin(null, null, 40, null);
     }
 }

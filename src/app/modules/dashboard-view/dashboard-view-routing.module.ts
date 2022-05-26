@@ -4,6 +4,7 @@ import { DashboardViewComponent } from './dashboard-view.component';
 
 const routes: Routes = [{ path: '', component: DashboardViewComponent, children: [
 	{ path: 'home', loadChildren: () => import('../dashboard/dashboard.module').then(m => m.DashboardModule) },
+	{ path: 'event', loadChildren: () => import('../event/event.module').then(m => m.EventModule) },
 ] }];
 
 @NgModule({

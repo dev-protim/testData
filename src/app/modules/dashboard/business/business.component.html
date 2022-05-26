@@ -1,0 +1,73 @@
+<div class="dashboard-box">
+    <div class="dashboard-box__header">
+        <div class="dashboard-box__header--title">
+            <h3>Business Lists</h3>
+            <p>Lorem ipsum dolor sit amet consectetur </p>
+        </div>
+        <div class="dashboard-box__header--buttons">
+            <!-- <button class="main-btn">Create Package</button> -->
+            <!-- <button class="main-btn" (click)="openPathValidationModal()">Check Paths</button> -->
+        </div>
+    </div>
+    <div class="dashboard-box__body">
+        <div class="dashboard-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Date <i class="flaticon-information-button" nzTooltipTitle="Business created date" nzTooltipPlacement="topLeft" nz-tooltip></i></th>
+                        <th>Pin</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="isLoading">
+                    <tr>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                    </tr>
+                </tbody>
+                <tbody *ngIf="!isLoading">
+                    <tr *ngFor="let business of businessList.data | slice:(page - 1) * pageSize : (page - 1) * pageSize + pageSize">
+                        <td>{{business.business_id}}</td>
+                        <td>{{business.business_name}}</td>
+                        <td>{{business.created_at}}</td>
+                        <td>{{business.pin}}</td>
+                        <td>
+                            <div class="dashboard-table__buttons">
+                                <button class="main-btn" [routerLink]="['/dashboard/home/business-details', business.business_id]">Show Devices</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- <div *ngIf="businessList.data.length">
+		</div> -->
+        <ng-container *ngIf="businessList.data.length > 10">
+            <nz-pagination [(nzPageIndex)]="page" [nzTotal]="businessList.data.length" [(nzPageSize)]="pageSize" (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)" [nzItemRender]="prev" [nzShowTotal]="rangeTemplate" [nzHideOnSinglePage]="true"></nz-pagination>
+            <ng-template #prev let-type let-page="page">
+                <ng-container [ngSwitch]="type">
+                    <ng-container *ngSwitchCase="'prev'"><i class="flaticon-back"></i></ng-container>
+                    <ng-container *ngSwitchCase="'page'">{{ page }}</ng-container>
+                    <ng-container *ngSwitchCase="'prev_5'">...</ng-container>
+                    <ng-container *ngSwitchCase="'next_5'">...</ng-container>
+                    <ng-container *ngSwitchCase="'next'"><i class="flaticon-next"></i></ng-container>
+                </ng-container>
+            </ng-template>
+            <ng-template #rangeTemplate let-range="range" let-total>
+                {{ range[0] }}-{{ range[1] }} of {{ total }} items
+            </ng-template>
+        </ng-container>
+    </div>
+</div>

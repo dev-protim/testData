@@ -6,13 +6,17 @@ import { DashboardComponent } from './dashboard.component';
 import { HistoryComponent } from './history/history.component';
 import { SharedModule } from 'src/app/shared/shared/shared.module';
 import { PackagesComponent } from './packages/packages.component';
+import { BusinessComponent } from './business/business.component';
+import { BusinessDetailsComponent } from './business-details/business-details.component';
 
 
 @NgModule({
 	declarations: [
 		DashboardComponent,
 		HistoryComponent,
-		PackagesComponent
+		PackagesComponent,
+  BusinessComponent,
+  BusinessDetailsComponent
 	],
 	imports: [
 		CommonModule,

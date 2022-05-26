@@ -7,13 +7,13 @@
 
 .dashboard {
     &-section {
-        overflow: hidden;
+        // overflow: hidden;
         display: flex;
         height: 100%;
         position: relative;
         &:before {
             content: "";
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 400px;
@@ -38,17 +38,33 @@
         flex: 1;
         -ms-flex: 1;
         width: 100%;
-        @include padding(50,
+        @include padding(65,
         15,
-        null,
+        20,
         15);
+        @include respond-to(small) {
+            @include padding(60,
+            null,
+            null,
+            null);
+            // flex: 0 0 auto;
+            // width: calc(100% - var(--history-panel-width) + 25px);
+        }
         @include respond-to(medium) {
-            @include padding(0,
+            @include padding(15,
             30,
             null,
             30);
-            flex: 0 0 auto;
-            width: calc(100% - var(--history-panel-width) + 25px);
+            // flex: 0 0 auto;
+            // width: calc(100% - var(--history-panel-width) + 25px);
+        }
+        @include respond-to(large) {
+            @include padding(20,
+            null,
+            null,
+            null);
+            // flex: 0 0 auto;
+            // width: calc(100% - var(--history-panel-width) + 25px);
         }
     }
 }
