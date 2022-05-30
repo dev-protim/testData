@@ -1,0 +1,16 @@
+{
+    "install_app": "apk path to download apk",
+    "uninstall": "package name",
+    "change_wallpaper": "business wallpaper image path",
+    "update": "apk path to download apk",
+    "change_pin": "4 digit number",
+    "remove_from_lock_app": "package name",
+    "remove_from_launcher": "package name",
+    "remove_from_both_app": "package name",
+    "add_to_both_app": "package name",
+    "add_to_launcher": "package name",
+    "add_to_lock_app": "package name",
+    "reboot": "",
+    "lock_on": "",
+    "lock_off": ""
+}

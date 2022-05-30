@@ -414,4 +414,25 @@
 }
 
 // Pagination ends
+// Select starts
+.ant-dropdown {
+    background-color: var(--theme-bg);
+    @include abstract.box-shadow(0, 5, 17, 4, rgba(#0a1125, 0.03), null);
+    border-radius: 5px;
+    margin-top: 0;
+    margin-bottom: 0;
+    overflow: hidden;
+    @include abstract.padding(5, null, 5, null);
+    ul {
+        li {
+            list-style: none;
+            @include abstract.padding(8, 15, 8, 15);
+            &:not(:first-child) {
+                padding-top: 0;
+            }
+        }
+    }
+}
+
+// Select ends
 // Ng zorro ends here

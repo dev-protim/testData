@@ -70,10 +70,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InternationalPhoneNumber2Module } from 'ngx-international-phone-number2';
 import { DashboardBasicInfoComponent } from 'src/app/modules/dashboard-basic-info/dashboard-basic-info.component';
 import { ApiCallService } from 'src/app/services/api-call/api-call.service';
+import { KeyvaluePipe } from 'src/app/pipe/keyvalue/keyvalue.pipe';
+import { NumberOnlyDirective } from 'src/app/directive/numberOnly/number-only.directive';
 
 @NgModule({
   declarations: [
-	DashboardBasicInfoComponent
+	DashboardBasicInfoComponent,
+	KeyvaluePipe,
+	NumberOnlyDirective
   ],
   imports: [
     CommonModule,
@@ -218,7 +222,9 @@ import { ApiCallService } from 'src/app/services/api-call/api-call.service';
 	NzResizableModule,
 	NzPipesModule,
 	InternationalPhoneNumber2Module,
-	DashboardBasicInfoComponent
+	DashboardBasicInfoComponent,
+	KeyvaluePipe,
+	NumberOnlyDirective
   ]
 })
 export class SharedModule { }

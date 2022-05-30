@@ -76,8 +76,8 @@ export class ApiCallService {
 	 * @description | Get all business
 	 */
 	getBusiness(): Observable<Business> {
-		// const url = this.config.rootURL + "/business_info.json";
-		const url = "https://e837-103-113-175-2.ngrok.io/launcher/admin/business";
+		const url = this.config.rootURL + "/business_info.json";
+		// const url = "https://e837-103-113-175-2.ngrok.io/launcher/admin/business";
 		return this.httpClient.get<Business>(url)
 			.pipe(
 				tap(_ => this.log('fetched businesses')),
@@ -90,6 +90,19 @@ export class ApiCallService {
 		return this.httpClient.get<Devices>(url).pipe(map((device: any) => {
 			return device.data.filter((device: any) => device.business_id === id)[0];
 		}))
+	}
+
+	/**
+	 * @author | Pranto
+	 * @description | Get all commands from json
+	 */
+	getCommands(): Observable<any> {
+		const url = this.config.rootURL + "/event_command.json";
+		return this.httpClient.get<any>(url)
+			.pipe(
+				tap(_ => this.log('fetched commands')),
+				catchError(this.handleError<any>('getCommands'))
+			);
 	}
 
 	/**

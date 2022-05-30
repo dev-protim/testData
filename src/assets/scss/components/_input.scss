@@ -85,3 +85,43 @@ textarea {
         }
     }
 }
+
+
+/*------------------------------------------------------------------
+[ Checkbox & Radio ]*/
+
+input {
+    &[type="checkbox"] {
+        display: none;
+        &+label {
+            position: relative;
+            padding-left: 1.7em;
+            @include abstract.font-size-em(15);
+            cursor: pointer;
+            &:before {
+                content: "";
+                width: 15px;
+                height: 15px;
+                position: absolute;
+                left: 0;
+                top: 0.19em;
+                border-radius: 3px;
+                border: 1px solid abstract.$primaryColor;
+                background-color: transparent;
+                transition: all 0.3s linear;
+                color: #fff;
+                line-height: 1;
+                font-size: 0.95em;
+            }
+        }
+        &:checked {
+            &+label {
+                &:before {
+                    content: "\f11a";
+                    font-family: Flaticon;
+                    background-color: abstract.$primaryColor;
+                }
+            }
+        }
+    }
+}

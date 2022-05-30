@@ -4,6 +4,7 @@
     "data": [{
         "business_id": "010101010",
         "business_name": "Pakora 1",
+        "wallpaper": "yo-launcher-apk/business-1.jpg",
         "device_info": [{
             "device_id": "869816051682440",
             "device_name": "Ctd-x-2022",
@@ -123,6 +124,7 @@
     }, {
         "business_id": "010101111",
         "business_name": "Spicy King",
+        "wallpaper": "yo-launcher-apk/business-2.jpg",
         "device_info": [{
             "device_id": "869816051682440",
             "device_name": "MTx-x-2022",

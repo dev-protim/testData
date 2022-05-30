@@ -3,10 +3,10 @@
         <div class="custom-input__label">
             <label for="" class="custom-input__label">Choose Business</label>
         </div>
-        <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" nzDropdownClassName="select-dropdown" formControlName="businessName" nzPlaceHolder="Select business" (ngModelChange)="showDevices($event)">
+        <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" nzDropdownClassName="select-dropdown" formControlName="businessID" nzPlaceHolder="Select business" (ngModelChange)="showDevices($event)">
             <nz-option *ngFor="let item of businessList" [nzLabel]="item.business_name" [nzValue]="item.business_id"></nz-option>
         </nz-select>
-        <p *ngIf="packageUploadForm.get('businessName').invalid && (packageUploadForm.get('businessName').dirty || packageUploadForm.get('businessName').touched)" class="custom-input__error">
+        <p *ngIf="packageUploadForm.get('businessID').invalid && (packageUploadForm.get('businessID').dirty || packageUploadForm.get('businessID').touched)" class="custom-input__error">
             Please select a name
         </p>
     </div>
@@ -14,77 +14,97 @@
         <div class="custom-input__label">
             <label for="" class="custom-input__label">Choose Devices</label>
         </div>
-        <nz-select class="custom-input__group" nzMode="multiple" [nzSuffixIcon]="arrowIcon" formControlName="device" nzPlaceHolder="Select business" (ngModelChange)="showPackage($event)" [nzFilterOption]="nzFilterOption">
-            <nz-option nzValue="jack" nzCustomContent>
-                <input type="checkbox" (change)="allCheck()">All
-            </nz-option>
-            <nz-option *ngFor="let item of deviceList[0]?.device_info;" nzCustomContent [nzLabel]="emptyData" [nzValue]="item.device_id">
-                <input type="checkbox" (change)="passValue(item.device_name, item)">{{item.device_name}}
-            </nz-option>
-            <!-- <label nz-checkbox [nzValue]="item.device_name" (ngModelChange)="passValue($event)">{{item.device_name}}</label> -->
-        </nz-select>
+        <div class="custom-input__group c-pointer" nz-dropdown nzTrigger="click" [nzDropdownMenu]="deviceDropdown">
+            <input type="text" placeholder="Choose devices" formControlName="device" class="custom-input__field c-pointer" readonly (ngModelChange)="showPackage($event)">
+        </div>
+        <nz-dropdown-menu #deviceDropdown="nzDropdownMenu">
+            <ul>
+                <li>
+                    <input type="checkbox" id="allDevice" [(ngModel)]="masterSelected" [ngModelOptions]="{standalone: true}" (ngModelChange)="allCheckUncheck()">
+                    <label for="allDevice">All
+					</label>
+                </li>
+                <li *ngFor="let item of deviceList[0]?.device_info;let i = index;">
+                    <input type="checkbox" [id]="'device'+i" [(ngModel)]="item.checked" [ngModelOptions]="{standalone: true}" (ngModelChange)="individualCheck(i)">
+                    <label [for]="'device'+i">{{item.device_name}}
+					</label>
+                </li>
+            </ul>
+        </nz-dropdown-menu>
         <p *ngIf="packageUploadForm.get('device').invalid && (packageUploadForm.get('device').dirty || packageUploadForm.get('device').touched)" class="custom-input__error">
-            Please select a name
-        </p>
-    </div>
-    <!-- <div class="custom-input">
-        <div class="custom-input__label">
-            <label for="" class="custom-input__label">Status</label>
-        </div>
-        <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" nzDropdownClassName="select-dropdown" formControlName="status" nzPlaceHolder="Select status">
-            <nz-option *ngFor="let item of packageStatus" [nzLabel]="item" [nzValue]="item"></nz-option>
-        </nz-select>
-        <p *ngIf="packageUploadForm.get('status').invalid && (packageUploadForm.get('status').dirty || packageUploadForm.get('status').touched)" class="custom-input__error">
-            Please select one
+            Please select atleast one device
         </p>
     </div>
     <div class="custom-input">
         <div class="custom-input__label">
-            <label for="" class="custom-input__label">Type</label>
+            <label for="" class="custom-input__label">Choose Command</label>
         </div>
-        <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" nzDropdownClassName="select-dropdown" formControlName="type" nzPlaceHolder="Select type">
-            <nz-option *ngFor="let item of packageType" [nzLabel]="item" [nzValue]="item"></nz-option>
+        <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" nzDropdownClassName="select-dropdown" formControlName="commandType" nzPlaceHolder="Select command" (ngModelChange)="showCommand($event)">
+            <nz-option *ngFor="let item of commandList | keyvalue" [nzLabel]="item.key" [nzValue]="item.key"></nz-option>
         </nz-select>
-        <p *ngIf="packageUploadForm.get('type').invalid && (packageUploadForm.get('type').dirty || packageUploadForm.get('type').touched)" class="custom-input__error">
-            Please select one
+        <p *ngIf="packageUploadForm.get('commandType').invalid && (packageUploadForm.get('commandType').dirty || packageUploadForm.get('commandType').touched)" class="custom-input__error">
+            Please select a command
         </p>
     </div>
-    <div class="custom-input">
+    <div class="custom-input" *ngIf="showPackageOptions">
         <div class="custom-input__label">
-            <label for="" class="custom-input__label">Installed</label>
+            <label for="" class="custom-input__label">Choose Package</label>
         </div>
-        <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" nzDropdownClassName="select-dropdown" formControlName="isInstalled" nzPlaceHolder="Select type">
-            <nz-option *ngFor="let item of isInstalled" [nzLabel]="item" [nzValue]="item"></nz-option>
+        <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" nzDropdownClassName="select-dropdown" formControlName="packageName" nzPlaceHolder="Select package">
+            <nz-option *ngFor="let item of packageList" [nzLabel]="item.package_name" [nzValue]="item.package_name"></nz-option>
         </nz-select>
-        <p *ngIf="packageUploadForm.get('isInstalled').invalid && (packageUploadForm.get('isInstalled').dirty || packageUploadForm.get('isInstalled').touched)" class="custom-input__error">
-            Please select one
+        <p *ngIf="packageUploadForm.get('packageName').invalid && (packageUploadForm.get('packageName').dirty || packageUploadForm.get('packageName').touched)" class="custom-input__error">
+            Please select a package
         </p>
-    </div> -->
+    </div>
+    <div class="custom-input" *ngIf="showPackagePath">
+        <div class="custom-input__label">
+            <label for="" class="custom-input__label">Choose Package Path</label>
+        </div>
+        <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" nzDropdownClassName="select-dropdown" formControlName="packagePath" nzPlaceHolder="Select package" (ngModelChange)="showPackagePathF($event)">
+            <nz-option *ngFor="let item of packageList" [nzLabel]="item.package_name" [nzValue]="item.apk_path"></nz-option>
+        </nz-select>
+        <p *ngIf="packageUploadForm.get('packagePath').invalid && (packageUploadForm.get('packagePath').dirty || packageUploadForm.get('packagePath').touched)" class="custom-input__error">
+            Please select a package
+        </p>
+    </div>
+    <div class="custom-input" *ngIf="isWallpaper">
+        <div class="custom-input__label">
+            <label for="" class="custom-input__label">Choose Wallpaper</label>
+        </div>
+        <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" nzDropdownClassName="select-dropdown" formControlName="wallpaper" nzPlaceHolder="Select wallpaper">
+            <nz-option *ngFor="let item of deviceList" [nzLabel]="item.wallpaper" [nzValue]="item.wallpaper"></nz-option>
+        </nz-select>
+        <p *ngIf="packageUploadForm.get('wallpaper').invalid && (packageUploadForm.get('wallpaper').dirty || packageUploadForm.get('wallpaper').touched)" class="custom-input__error">
+            Please select a package
+        </p>
+    </div>
+    <div class="custom-input" *ngIf="isPin">
+        <div class="custom-input__label">
+            <label for="" class="custom-input__label">Enter 4 Digit Pin</label>
+        </div>
+        <div class="custom-input__group">
+            <input type="text" class="custom-input__field" placeholder="Enter 4 digit pin" formControlName="pin" appNumberOnly>
+        </div>
+        <p *ngIf="packageUploadForm.get('pin').invalid && (packageUploadForm.get('pin').dirty || packageUploadForm.get('pin').touched)" class="custom-input__error">
+            Please enter 4 digit pin
+        </p>
+    </div>
+    <div class="custom-input" *ngIf="isVersion">
+        <div class="custom-input__label">
+            <label for="" class="custom-input__label">Enter Version</label>
+        </div>
+        <div class="custom-input__group">
+            <input type="text" class="custom-input__field" placeholder="Enter version name" formControlName="version">
+        </div>
+        <p *ngIf="packageUploadForm.get('version').invalid && (packageUploadForm.get('version').dirty || packageUploadForm.get('version').touched)" class="custom-input__error">
+            Please enter an version
+        </p>
+    </div>
     <ng-template #arrowIcon>
         <i class="flaticon-down-arrow"></i>
     </ng-template>
 
 </form>
-<button class="main-btn" (click)="handleSubmit()">Submit</button>
 <!-- <button class="main-btn" (click)="handleSubmit()" [disabled]="packageUploadForm.invalid">Submit</button> -->
-
-<!-- <nz-select nzMode="multiple" nzPlaceHolder="Please select">
-    <nz-option *ngFor="let item of newArrayList" [nzLabel]="item" [nzValue]="item"></nz-option>
-</nz-select> -->
-<!-- <input type="checkbox" (change)="passValue($event)"> -->
-<form [formGroup]="testForm">
-    <div class="row">
-        <div class="col-md-6">
-            <ul class="list-group">
-                <li class="list-group-item">
-                    <input type="checkbox" name="list_name" value="m1" [checked]="checkAllSelected()" (click)="selectAll($event)" /> <strong>Select/ Unselect All</strong>
-                </li>
-            </ul>
-            <ul class="list-group">
-                <li class="list-group-item" *ngFor="let item of checklist; let i = index;">
-                    <input type="checkbox" formControlName="{{i}}" name="list_name" value="{{item.id}}" /> {{item.desc}}
-                </li>
-            </ul>
-        </div>
-    </div>
-</form>
+<button class="main-btn" (click)="handleSubmit()">Submit</button>
