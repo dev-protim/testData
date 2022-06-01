@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ApiCallService } from 'src/app/services/api-call/api-call.service';
-import { Business, Data, Devices } from '../dashboard/business/business';
+import { WebSocketService } from 'src/app/services/web-socket/web-socket.service';
+import { Business, Data } from '../dashboard/business/business';
 
 @Component({
 	selector: 'app-event',
@@ -21,13 +21,19 @@ export class EventComponent implements OnInit {
 	masterSelected: any;
 	newCheckList: any;
 	commandList: any;
-	showPackageOptions: boolean = false;
-	showPackagePath: boolean = false;
+	// showPackageOptions: boolean = false;
+	// showPackagePath: boolean = false;
 	isVersion: boolean = false;
-	isPin: boolean = false;
-	isWallpaper: boolean = false;
+	// isPin: boolean = false;
+	// isWallpaper: boolean = false;
+	commandEvent: any;
+	// packagePath: any;
+	// versionControlTest: any;
+	message: any;
+	connection: any;
+	isEventSent: boolean = false;
 
-	constructor(private http: HttpClient, private fb: FormBuilder, private apiService: ApiCallService) {
+	constructor(private fb: FormBuilder, private apiService: ApiCallService, private webSocket: WebSocketService) {
 		/**
 		 * @author Pranto
 		 * @description Get business list from API
@@ -55,17 +61,13 @@ export class EventComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.packageUploadForm = this.fb.group({
-			businessID: ['', [Validators.required]],
-			device: [[], [Validators.required]],
-			deviceID: [[]],
-			commandType: ['', [Validators.required]],
-			packageName: ['', [Validators.required]],
-			packagePath: ['', [Validators.required]],
-			pin: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4), Validators.pattern('[0-9]*')]],
-			emptyString: [null],
-			wallpaper: ['', [Validators.required]],
-			version: ['', [Validators.required]]
+			business_id: ['', [Validators.required]],
+			// device: ['', [Validators.required]],
+			device_id: [''],
+			command: ['', [Validators.required]]
 		})
+
+		// this.webSocket.connect();
 	}
 
 	allCheckUncheck(): void {
@@ -80,7 +82,6 @@ export class EventComponent implements OnInit {
 		this.masterSelected = this.deviceList[0].device_info.every((item: any) => {
 			return item.checked == true;
 		});
-
 		this.getSelectedDevice();
 	}
 
@@ -99,11 +100,11 @@ export class EventComponent implements OnInit {
 			});
 			if (this.masterSelected) {
 				this.packageUploadForm.patchValue({
-					deviceID: ''
+					device_id: ''
 				});
 			} else {
 				this.packageUploadForm.patchValue({
-					deviceID: this.newCheckList.map((item: any) => {
+					device_id: this.newCheckList.map((item: any) => {
 						return item.device_id;
 					})
 				});
@@ -111,7 +112,7 @@ export class EventComponent implements OnInit {
 		} else {
 			this.packageUploadForm.patchValue({
 				device: null,
-				deviceID: null
+				device_id: null
 			});
 		}
 		this.packageList = this.newCheckList[0]?.packages;
@@ -121,82 +122,100 @@ export class EventComponent implements OnInit {
 	}
 
 	showDevices(event: any): void {
-		this.packageUploadForm.controls.device.setValue([]);
-		this.deviceList = this.businessList.filter((item: any) => {
-			return item.business_id === event;
-		});
-		console.log(this.deviceList);
+		// this.packageUploadForm.controls.device.setValue([]);
+		if (event !== null) {
+			this.deviceList = this.businessList.filter((item: any) => {
+				return item.business_id === event;
+			});
+			console.log(this.deviceList);
+		}
 	}
-	showPackage(event: any): void {
-		// this.packageList = this.deviceList[0].device_info.filter((item: any) => {
-		// 	return item.device_name === event;
-		// });
-		// console.log(this.packageList, "package");
+
+	showPackages(event: any): void {
+		// Get all packages if device_id mached with event
+		if (event !== null) {
+			this.packageList = this.deviceList[0].device_info.filter((item: any) => {
+				return item.device_id === event;
+			})[0].packages;
+		}
+		console.log(this.packageList, "package lists");
 	}
 
 	showCommand(event: any): void {
-		console.log(event);
-		if (event === "uninstall" || event === "remove_from_lock_app" || event === "remove_from_launcher" || event === "remove_from_both_app" || event === "add_to_lock_app" || event === "add_to_launcher" || event === "add_to_both_app") {
-			this.showPackageOptions = true;
-			this.isVersion = false;
-			this.showPackagePath = false;
-			this.isPin = false;
-			this.isWallpaper = false;
-			this.packageUploadForm.controls.emptyString.setValue(null);
-		} else if (event === "install_app" || event === "update") {
-			this.showPackagePath = true;
-			this.isVersion = true;
-			this.showPackageOptions = false;
-			this.isPin = false;
-			this.isWallpaper = false;
-			this.packageUploadForm.controls.emptyString.setValue(null);
-		} else if (event === "change_pin") {
-			this.isPin = true;
-			this.showPackagePath = false;
-			this.isVersion = false;
-			this.showPackageOptions = false;
-			this.packageUploadForm.controls.emptyString.setValue(null);
-			this.isWallpaper = false;
-		} else if (event === "reboot" || event === "lock_on" || event === "lock_off") {
-			this.packageUploadForm.controls.emptyString.setValue("");
-			this.isWallpaper = false;
-			this.showPackageOptions = false;
-			this.showPackagePath = false;
-			this.isVersion = false;
-			this.isPin = false;
-		} else if (event === "change_wallpaper") {
-			this.isWallpaper = true;
-			this.showPackageOptions = false;
-			this.showPackagePath = false;
-			this.isVersion = false;
-			this.isPin = false;
-			this.packageUploadForm.controls.emptyString.setValue(null);
+		this.commandEvent = event;
+		if (this.commandEvent === 'change_pin') {
+			this.packageUploadForm.removeControl('value', this.fb.control('', [Validators.required]));
+			this.packageUploadForm.addControl('value', this.fb.control('', [Validators.required, Validators.minLength(4), Validators.maxLength(4), Validators.pattern('[0-9]*')]));
 		} else {
-			this.showPackageOptions = false;
-			this.showPackagePath = false;
+			this.packageUploadForm.removeControl('value', this.fb.control('', [Validators.required, Validators.minLength(4), Validators.maxLength(4), Validators.pattern('[0-9]*')]));
+			this.packageUploadForm.addControl('value', this.fb.control('', [Validators.required]));
+		}
+		if (this.commandEvent === 'reboot' || this.commandEvent === 'lock_on' || this.commandEvent === 'lock_off') {
+			this.packageUploadForm.removeControl('value', this.fb.control('', [Validators.required]));
+			// this.packageUploadForm.patchValue({
+			// 	value: null
+			// })
+		}
+		if (this.commandEvent !== 'install_app' || this.commandEvent !== 'update') {
 			this.isVersion = false;
-			this.isPin = false;
-			this.packageUploadForm.controls.emptyString.setValue(null);
-			this.isWallpaper = false;
+			this.packageUploadForm.removeControl('version_id', this.fb.control('', Validators.required));
 		}
 	}
 
-	showPackagePathF(event: any): void {
-		// this.packageUploadForm.controls.packagePath.setValue(event);
-		console.log(this.packageUploadForm.controls.packagePath, "form");
-		// this.packageUploadForm.controls.packagePath.setValue(value);
+	handlePackagePath(event: any): void {
+		let packageName;
+		if (event !== null) {
+			// this.packagePath = event?.apk_path;
+			packageName = event?.package_name;
+			if (packageName === 'com.epos.valt.app') {
+				this.isVersion = true;
+				this.packageUploadForm.addControl('version_id', this.fb.control('', Validators.required));
+			} else {
+				this.isVersion = false;
+				this.packageUploadForm.removeControl('version_id', this.fb.control('', Validators.required));
+			}
+		}
 	}
 
 	handleSubmit(): void {
-		console.log(this.packageUploadForm.value);
-		// reset form
+		// console.log(this.packagePath, "package path");
+		let formObject = this.packageUploadForm.value;
+		if (formObject.command === 'install_app' || formObject.command === 'update') {
+			formObject.value = formObject.value.apk_path;
+		}
+		console.log(formObject, "object");
+
+		// this.webSocket.sendMessage(this.packageUploadForm.value).subscribe(
+		// 	(data: any) => {
+		// 		console.log(data, "from component");
+		// 		this.message = data.status;
+		// 	}
+		// );
+		// this.webSocket.sendMessage(formObject);
+		// this.connection = this.webSocket.getMessage().subscribe(message => {
+		// 	this.message = message;
+		// 	console.log(this.message, message);
+		// })
+		this.deviceList = [];
+		this.isVersion = false;
 		this.packageUploadForm.reset();
 		this.masterSelected = false;
+		// this.businessList.forEach((element: any) => {
+		// 	element.device_info.forEach((item: any) => {
+		// 		item.checked = false;
+		// 	}
+		// 	);
+		// }
+		// );
 		this.newCheckList = [];
-		this.deviceList[0]?.device_info.forEach((element: any) => {
-			element.checked = false;
-		}
-		);
+	}
+
+	closeSubmissionStatusModal(): void {
+		this.isEventSent = false;
+	}
+
+	ngOnDestroy(): void {
+		this.connection.unsubscribe();
 	}
 
 }

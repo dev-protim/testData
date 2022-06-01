@@ -1,10 +1,10 @@
 @font-face {
     font-family: "flaticon";
-    src: url("./flaticon.ttf?c77709ba336f2561b9986cea5a16edee") format("truetype"),
-url("./flaticon.woff?c77709ba336f2561b9986cea5a16edee") format("woff"),
-url("./flaticon.woff2?c77709ba336f2561b9986cea5a16edee") format("woff2"),
-url("./flaticon.eot?c77709ba336f2561b9986cea5a16edee#iefix") format("embedded-opentype"),
-url("./flaticon.svg?c77709ba336f2561b9986cea5a16edee#flaticon") format("svg");
+    src: url("./flaticon.ttf?7e9630a2247ac64528efd72d69acbd76") format("truetype"),
+url("./flaticon.woff?7e9630a2247ac64528efd72d69acbd76") format("woff"),
+url("./flaticon.woff2?7e9630a2247ac64528efd72d69acbd76") format("woff2"),
+url("./flaticon.eot?7e9630a2247ac64528efd72d69acbd76#iefix") format("embedded-opentype"),
+url("./flaticon.svg?7e9630a2247ac64528efd72d69acbd76#flaticon") format("svg");
 }
 
 i[class^="flaticon-"]:before, i[class*=" flaticon-"]:before {
@@ -101,4 +101,10 @@ i[class^="flaticon-"]:before, i[class*=" flaticon-"]:before {
 }
 .flaticon-cloud-upload:before {
     content: "\f11c";
+}
+.flaticon-verified:before {
+    content: "\f11d";
+}
+.flaticon-close-circular-button-symbol:before {
+    content: "\f11e";
 }

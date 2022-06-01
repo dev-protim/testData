@@ -86,7 +86,7 @@
             ],
             "is_connected": true
         }, {
-            "device_id": "869816051682412",
+            "device_id": "869816051682413",
             "device_name": "Ctd-p-2022",
             "packages": [{
                     "package_name": "com.epos.valt.app",
