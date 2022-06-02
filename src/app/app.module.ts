@@ -12,6 +12,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { ConfigService } from './services/config/config.service';
 import { LoaderInterceptor } from './interceptor/loader.interceptor';
+import { ModalControllerService } from './services/modal-controller/modal-controller.service';
+// import { AlertModalComponent } from './helper-component/alert-modal/alert-modal.component';
+import { SharedModule } from './shared/shared/shared.module';
 registerLocaleData(en);
 
 export function initConfigInfo(urlList: ConfigService) {
@@ -19,17 +22,20 @@ export function initConfigInfo(urlList: ConfigService) {
 }
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NotFoundComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-  ],
-  providers: [{ provide: NZ_I18N, useValue: en_US }, { provide: APP_INITIALIZER, useFactory: initConfigInfo, deps: [ConfigService], multi: true }, {provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true}],
-  bootstrap: [AppComponent]
+	declarations: [
+		AppComponent,
+		NotFoundComponent,
+		// AlertModalComponent
+	],
+	imports: [
+		BrowserModule,
+		AppRoutingModule,
+		HttpClientModule,
+		BrowserAnimationsModule,
+		SharedModule
+	],
+	providers: [{ provide: NZ_I18N, useValue: en_US }, { provide: APP_INITIALIZER, useFactory: initConfigInfo, deps: [ConfigService], multi: true }, { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true }],
+	// entryComponents: [AlertModalComponent],
+	bootstrap: [AppComponent]
 })
 export class AppModule { }

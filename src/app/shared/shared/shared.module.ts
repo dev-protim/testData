@@ -72,12 +72,17 @@ import { DashboardBasicInfoComponent } from 'src/app/modules/dashboard-basic-inf
 import { ApiCallService } from 'src/app/services/api-call/api-call.service';
 import { KeyvaluePipe } from 'src/app/pipe/keyvalue/keyvalue.pipe';
 import { NumberOnlyDirective } from 'src/app/directive/numberOnly/number-only.directive';
+// import { ModalControllerService } from 'src/app/services/modal-controller/modal-controller.service';
+// import { AlertModalComponent } from 'src/app/helper-component/alert-modal/alert-modal.component';
+import { HelperModule } from 'src/app/helper-component/helper.module';
+// import { HelperModule } from 'src/app/helper-component/helper.module';
 
 @NgModule({
   declarations: [
 	DashboardBasicInfoComponent,
 	KeyvaluePipe,
-	NumberOnlyDirective
+	NumberOnlyDirective,
+	// AlertModalComponent
   ],
   imports: [
     CommonModule,
@@ -224,7 +229,11 @@ import { NumberOnlyDirective } from 'src/app/directive/numberOnly/number-only.di
 	InternationalPhoneNumber2Module,
 	DashboardBasicInfoComponent,
 	KeyvaluePipe,
-	NumberOnlyDirective
-  ]
+	NumberOnlyDirective,
+	// ModalControllerService
+	HelperModule
+  ],
+//   providers: [ModalControllerService],
+  entryComponents: [HelperModule],
 })
 export class SharedModule { }

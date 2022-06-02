@@ -1,0 +1,8 @@
+<div class="modal-body event-status__modal" *ngIf="componentReceiver === 'success'">
+    <i class="flaticon-verified t-col-success"></i>
+    <p>Your event has been successfully sent</p>
+</div>
+<div class="modal-body event-status__modal" *ngIf="componentReceiver === 'failed'">
+    <i class="flaticon-close-circular-button-symbol t-col-danger"></i>
+    <p>Your event has been failed</p>
+</div>

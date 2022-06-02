@@ -72,3 +72,15 @@ button {
         cursor: not-allowed;
     }
 }
+
+.close-icon {
+    border: 0;
+    background-color: transparent;
+    padding: 0;
+    @include abstract.font-size-em(14);
+    color: var(--text-color);
+    transition: color 0.3s linear;
+    &:hover {
+        color: abstract.$secondaryColor;
+    }
+}

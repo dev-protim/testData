@@ -13,6 +13,14 @@
     color: abstract.$secondaryColor !important;
 }
 
+.t-col-success {
+    color: abstract.$success !important;
+}
+
+.t-col-danger {
+    color: abstract.$danger !important;
+}
+
 .c-pointer {
     cursor: pointer;
 }

@@ -1,0 +1,120 @@
+<div class="event-form" [ngClass]="{'active': isEventModalMobile}">
+    <div class="event-form__title">
+        <h3>Event Form</h3>
+        <button class="close-icon d-block d-lg-none" (click)="closeEventModalMobile()"><i class="flaticon-close"></i></button>
+    </div>
+    <div class="event-form__content">
+        <form [formGroup]="packageUploadForm" (ngSubmit)="handleSubmit()">
+            <div class="custom-input">
+                <div class="custom-input__label">
+                    <label for="" class="custom-input__label">Choose Business</label>
+                </div>
+                <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" nzDropdownClassName="select-dropdown" formControlName="business_id" nzPlaceHolder="Select business" (ngModelChange)="showDevices($event)">
+                    <nz-option *ngFor="let item of businessList" [nzLabel]="item.business_name" [nzValue]="item.business_id"></nz-option>
+                </nz-select>
+                <p *ngIf="packageUploadForm.get('business_id').invalid && (packageUploadForm.get('business_id').dirty || packageUploadForm.get('business_id').touched)" class="custom-input__error">
+                    Please select a name
+                </p>
+            </div>
+            <div class="custom-input" *ngIf="deviceList?.length">
+                <div class="custom-input__label">
+                    <label for="" class="custom-input__label">Choose Devices</label>
+                </div>
+                <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" nzDropdownClassName="select-dropdown" formControlName="device_id" nzPlaceHolder="Select a device" (ngModelChange)="showPackages($event)">
+                    <nz-option *ngFor="let item of deviceList[0]?.device_info" [nzLabel]="item.device_name" [nzValue]="item.device_id"></nz-option>
+                </nz-select>
+                <!-- <div class="custom-input__group c-pointer" nz-dropdown nzTrigger="click" [nzDropdownMenu]="deviceDropdown">
+					<input type="text" placeholder="Choose devices" formControlName="device_id" class="custom-input__field c-pointer" readonly>
+				</div>
+				<nz-dropdown-menu #deviceDropdown="nzDropdownMenu">
+					<ul>
+						<li>
+							<input type="checkbox" id="allDevice" [(ngModel)]="masterSelected" [ngModelOptions]="{standalone: true}" (ngModelChange)="allCheckUncheck()">
+							<label for="allDevice">All
+							</label>
+						</li>
+						<li *ngFor="let item of deviceList[0]?.device_info;let i = index;">
+							<input type="checkbox" [id]="'device'+i" [checked]="item.checked" [(ngModel)]="item.checked" [ngModelOptions]="{standalone: true}" (ngModelChange)="individualCheck(i)">
+							<label [for]="'device'+i">{{item.device_name}}
+							</label>
+						</li>
+					</ul>
+				</nz-dropdown-menu> -->
+                <p *ngIf="packageUploadForm.get('device_id').invalid && (packageUploadForm.get('device_id').dirty || packageUploadForm.get('device_id').touched)" class="custom-input__error">
+                    Please select a device
+                </p>
+            </div>
+            <div class="custom-input">
+                <div class="custom-input__label">
+                    <label for="" class="custom-input__label">Choose Command</label>
+                </div>
+                <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" nzDropdownClassName="select-dropdown" formControlName="command" nzPlaceHolder="Select command" (ngModelChange)="showCommand($event)">
+                    <nz-option *ngFor="let item of commandList | keyvalue" [nzLabel]="item.key" [nzValue]="item.key"></nz-option>
+                </nz-select>
+                <p *ngIf="packageUploadForm.get('command').invalid && (packageUploadForm.get('command').dirty || packageUploadForm.get('command').touched)" class="custom-input__error">
+                    Please select a command
+                </p>
+            </div>
+            <div class="custom-input" *ngIf="packageUploadForm.get('command').value === 'uninstall' || packageUploadForm.get('command').value ===  'remove_from_lock_app' || packageUploadForm.get('command').value === 'remove_from_launcher' || packageUploadForm.get('command').value === 'remove_from_both_app' || packageUploadForm.get('command').value === 'add_to_lock_app' || packageUploadForm.get('command').value === 'add_to_launcher' || packageUploadForm.get('command').value === 'add_to_both_app'">
+                <div class="custom-input__label">
+                    <label for="" class="custom-input__label">Choose Package</label>
+                </div>
+                <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" nzDropdownClassName="select-dropdown" formControlName="value" nzPlaceHolder="Select package">
+                    <nz-option *ngFor="let item of packageList" [nzLabel]="item.package_name" [nzValue]="item.package_name"></nz-option>
+                </nz-select>
+                <p *ngIf="packageUploadForm.get('value').invalid && (packageUploadForm.get('value').dirty || packageUploadForm.get('value').touched)" class="custom-input__error">
+                    Please select a package
+                </p>
+            </div>
+            <div class="custom-input" *ngIf="packageUploadForm.get('command').value === 'install_app' || packageUploadForm.get('command').value === 'update'">
+                <div class="custom-input__label">
+                    <label for="" class="custom-input__label">Choose Package Path</label>
+                </div>
+                <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" nzDropdownClassName="select-dropdown" formControlName="value" nzPlaceHolder="Select package" (ngModelChange)="handlePackagePath($event)">
+                    <nz-option *ngFor="let item of packageList" [nzLabel]="item.package_name" [nzValue]="item"></nz-option>
+                </nz-select>
+                <p *ngIf="packageUploadForm.get('value').invalid && (packageUploadForm.get('value').dirty || packageUploadForm.get('value').touched)" class="custom-input__error">
+                    Please select a package
+                </p>
+            </div>
+            <div class="custom-input" *ngIf="packageUploadForm.get('command').value === 'change_wallpaper'">
+                <div class="custom-input__label">
+                    <label for="" class="custom-input__label">Choose Wallpaper</label>
+                </div>
+                <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" nzDropdownClassName="select-dropdown" formControlName="value" nzPlaceHolder="Select wallpaper">
+                    <nz-option *ngFor="let item of deviceList" [nzLabel]="item.wallpaper" [nzValue]="item.wallpaper"></nz-option>
+                </nz-select>
+                <p *ngIf="packageUploadForm.get('value').invalid && (packageUploadForm.get('value').dirty || packageUploadForm.get('value').touched)" class="custom-input__error">
+                    Please select a package
+                </p>
+            </div>
+            <div class="custom-input" *ngIf="packageUploadForm.get('command').value === 'change_pin'">
+                <div class="custom-input__label">
+                    <label for="" class="custom-input__label">Enter 4 Digit Pin</label>
+                </div>
+                <div class="custom-input__group">
+                    <input type="text" class="custom-input__field" placeholder="Enter 4 digit pin" formControlName="value" appNumberOnly>
+                </div>
+                <p *ngIf="packageUploadForm.get('value').invalid && (packageUploadForm.get('value').dirty || packageUploadForm.get('value').touched)" class="custom-input__error">
+                    Please enter 4 digit pin
+                </p>
+            </div>
+            <div class="custom-input" *ngIf="isVersion">
+                <div class="custom-input__label">
+                    <label for="" class="custom-input__label">Enter Version</label>
+                </div>
+                <div class="custom-input__group">
+                    <input type="text" class="custom-input__field" placeholder="Enter version name" formControlName="version_id">
+                </div>
+                <p *ngIf="packageUploadForm.get('version_id').invalid && (packageUploadForm.get('version_id').dirty || packageUploadForm.get('version_id').touched)" class="custom-input__error">
+                    Please enter an version
+                </p>
+            </div>
+            <ng-template #arrowIcon>
+                <i class="flaticon-down-arrow"></i>
+            </ng-template>
+
+        </form>
+        <button class="main-btn" (click)="handleSubmit()" [disabled]="packageUploadForm.invalid">Submit</button>
+    </div>
+</div>

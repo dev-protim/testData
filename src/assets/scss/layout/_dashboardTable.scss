@@ -21,6 +21,7 @@
                 @include abstract.font-size-em(14);
                 border-bottom: 1px solid rgba(abstract.$grayColor, 0.42);
                 @include abstract.padding(null, 12, 12, 12);
+                white-space: nowrap;
                 i {
                     vertical-align: middle;
                     @include abstract.font-size-em(17);

@@ -1,6 +1,4 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { DasbboardControllerService } from 'src/app/services/dashboard-controller/dasbboard-controller.service';
-import { HistoryComponent } from '../../dashboard/history/history.component';
 
 @Component({
 	selector: 'app-dashboard-header',
@@ -9,14 +7,14 @@ import { HistoryComponent } from '../../dashboard/history/history.component';
 })
 export class DashboardHeaderComponent implements OnInit {
 
-	@ViewChild(HistoryComponent) dashboardHistoryComponent: any;
+	// @ViewChild(HistoryComponent) dashboardHistoryComponent: any;
 
 	@Output() isToggleCollapse = new EventEmitter<Boolean>();
 	@Output() isToggleHistory = new EventEmitter<Boolean>();
 	isSideNavToggle: boolean = false;
 	isHistoryToggle: boolean = false;
 
-	constructor(public dashboardViewController: DasbboardControllerService) { }
+	constructor() { }
 
 	ngOnInit(): void {
 	}
@@ -42,9 +40,8 @@ export class DashboardHeaderComponent implements OnInit {
 	 * @author | Pranto
 	 * @description | Toggle history
 	 */
-	collapseHistory(): void {
-		this.isHistoryToggle = !this.isHistoryToggle;
-		this.dashboardViewController.dashboardHistorySendMessage(this.isHistoryToggle);
-	}
+	// collapseHistory(): void {
+	// 	this.isHistoryToggle = !this.isHistoryToggle;
+	// }
 
 }

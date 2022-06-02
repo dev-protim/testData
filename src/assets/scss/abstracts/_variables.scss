@@ -3,18 +3,24 @@
     --theme-bg: #fff;
     --text-color: #0a1125;
     --side-nav-width: 200px;
-    --history-panel-width: 250px;
+    --history-panel-width: 100%;
+    @media only screen and (min-width: 486px) {
+        --history-panel-width: 375px;
+    }
+    // @media only screen and (min-width: 992px) {
+    //     --history-panel-width: 375px;
+    // }
     @media only screen and (min-width: 1200px) {
         --side-nav-width: 250px;
-        --history-panel-width: 300px;
+        // --history-panel-width: 375px;
     }
 }
 
-$breakpoints: ( 'max-small': (max-width: 767px), 'small': (min-width: 768px), 'max-medium': (max-width: 991px), 'medium': (min-width: 992px), 'large': (min-width: 1200px), 'x-large': (min-width: 1400px)) !default;
+$breakpoints: ( 'max-xs-small': (max-width: 485px), 'xs-small': (min-width: 486px), 'max-small': (max-width: 767px), 'small': (min-width: 768px), 'max-medium': (max-width: 991px), 'medium': (min-width: 992px), 'large': (min-width: 1200px), 'x-large': (min-width: 1400px)) !default;
 $primaryColor: #293984;
 $primaryColorDark: #222F6D;
 $secondaryColor: #FFB401;
-$grayColor: #d5d5d5;
+$grayColor: #d1d8e1;
 $danger: #c21d15;
 $success: #49a133;
 $basement: 16;

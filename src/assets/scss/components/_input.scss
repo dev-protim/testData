@@ -39,7 +39,7 @@ textarea {
         }
         &__group {
             display: flex;
-            border: 1px solid #ddd;
+            border: 1px solid abstract.$grayColor;
             border-radius: 5px;
             padding: var(--input-btn-padding);
             line-height: abstract.$line-height-base * 1px;

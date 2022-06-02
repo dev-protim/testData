@@ -1,0 +1,47 @@
+<div class="dashboard-box">
+    <div class="dashboard-box__header">
+        <div class="dashboard-box__header--title">
+            <h3>Event History</h3>
+            <p>Lorem ipsum dolor sit amet consectetur </p>
+        </div>
+        <div class="dashboard-box__header--buttons">
+            <!-- <button class="main-btn">Create Package</button> -->
+            <!-- <button class="main-btn" (click)="openPathValidationModal()">Check Paths</button> -->
+        </div>
+    </div>
+    <nz-select [(ngModel)]="selectedStatus" (ngModelChange)="sortByStatus($event)" nzPlaceHolder="Sort by status">
+        <nz-option *ngFor="let item of statusList" [nzValue]="item" [nzLabel]="item"></nz-option>
+    </nz-select>
+    <div class="dashboard-box__body">
+        <div class="dashboard-table" *ngIf="eventHistoryList?.length">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Socket History</th>
+                        <th>Device ID</th>
+                        <th>Business ID</th>
+                        <th>Date <i class="flaticon-information-button" nzTooltipTitle="Event created date" nzTooltipPlacement="topLeft" nz-tooltip></i></th>
+                        <th>Message</th>
+                        <th>Command</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of eventHistoryList">
+                        <td>{{item.socket_history}}</td>
+                        <td>{{item.ref_device_id}}</td>
+                        <td>{{item.ref_business_id}}</td>
+                        <td>{{item.created_at}}</td>
+                        <td>{{item.message | titlecase}}</td>
+                        <td>{{item.command_value}}</td>
+                        <td>{{item.status | titlecase}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="dashboard-box__empty" *ngIf="eventHistoryList?.length === 0">
+            <img src="assets/img/empty.png" alt="Empty">
+            <p>No history found</p>
+        </div>
+    </div>
+</div>

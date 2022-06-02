@@ -231,6 +231,35 @@
         @include abstract.padding(13, 20, 13, 20);
         border-top: 1px solid rgba(abstract.$grayColor, 0.42);
     }
+    &.modal-no__footer {
+        .ant-modal-footer {
+            display: none;
+        }
+    }
+    &.small-modal {
+        max-width: 375px;
+        width: 90% !important;
+    }
+    &.alert-modal {
+        .ant-modal-header {
+            display: none;
+        }
+        .ant-modal-body {
+            @include abstract.padding(50, 50, 50, 50);
+            text-align: center;
+            .modal-body {
+                i {
+                    @include abstract.font-size-em(55);
+                    line-height: 1;
+                    @include abstract.margin(null, null, 3.5, null);
+                    display: block;
+                }
+                p {
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
 }
 
 .modal-footer {
