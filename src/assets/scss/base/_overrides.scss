@@ -273,6 +273,23 @@
 
 // Modal ends
 // Select starts
+.ant-select {
+    display: flex;
+    border: 1px solid abstract.$grayColor;
+    border-radius: 5px;
+    // padding: var(--input-btn-padding);
+    line-height: abstract.$line-height-base * 1px;
+    height: 42px;
+    padding: 0;
+    font-size: 0.9375em;
+    .ant-select-selector {
+        padding: var(--input-btn-padding);
+    }
+    @include abstract.respond-to(small) {
+        height: 50px;
+    }
+}
+
 .ant-select.custom-input__group {
     padding: 0;
     @include abstract.font-size-em(15);
@@ -299,6 +316,7 @@
     background-color: transparent;
     height: 100%;
     width: 100%;
+    padding: var(--input-btn-padding);
 }
 
 .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
@@ -310,7 +328,10 @@
 .ant-select-arrow {
     color: var(--text-color);
     @include abstract.font-size-em(18);
-    right: 14px;
+    right: 12px;
+    @include abstract.respond-to(small) {
+        right: 14px;
+    }
 }
 
 .ant-select-single .ant-select-selector .ant-select-selection-item {
@@ -320,12 +341,12 @@
     }
 }
 
-.select-dropdown {
-    .ant-select-dropdown {
-        margin: 0;
-        border-radius: 5px;
-        margin-top: 1px;
-    }
+// .select-dropdown {
+// }
+.ant-select-dropdown {
+    margin: 0;
+    border-radius: 5px;
+    margin-top: 1px;
 }
 
 .ant-select-item {
@@ -353,6 +374,29 @@
     line-height: 20px;
     @include abstract.respond-to(small) {
         line-height: 24px;
+    }
+}
+
+// Event history sort select
+.event-history__sort {
+    height: 39px;
+    width: 110px;
+    @include abstract.font-size-em(14);
+    .ant-select-selector {
+        padding: 0.5em 0.9em !important;
+    }
+    &.ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder {
+        line-height: 25px;
+    }
+    .ant-select-arrow {
+        margin-top: -5px;
+    }
+    @include abstract.respond-to(small) {
+        height: 43px;
+        width: 120px;
+        .ant-select-arrow {
+            margin-top: -8px;
+        }
     }
 }
 

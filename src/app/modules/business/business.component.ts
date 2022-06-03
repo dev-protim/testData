@@ -4,9 +4,9 @@ import { LoaderService } from 'src/app/services/loader/loader.service';
 import { Business } from './business';
 
 @Component({
-	selector: 'app-business',
-	templateUrl: './business.component.html',
-	styleUrls: ['./business.component.scss']
+  selector: 'app-business',
+  templateUrl: './business.component.html',
+  styleUrls: ['./business.component.scss']
 })
 export class BusinessComponent implements OnInit {
 

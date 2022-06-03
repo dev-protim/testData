@@ -1,9 +1,10 @@
-import { HttpClient, HttpHeaders, HttpEventType, HttpRequest, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpEventType, HttpRequest, HttpResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
-import { Business, Devices } from 'src/app/modules/dashboard/business/business';
+import { Business, Devices } from 'src/app/modules/business/business';
 import { Package } from 'src/app/modules/dashboard/packages/package.class';
 import { ConfigService } from '../config/config.service';
+import { EventHistory } from 'src/app/modules/event/event-history/event.typing';
 // throwError
 // catchError
 // map
@@ -103,6 +104,29 @@ export class ApiCallService {
 				tap(_ => this.log('fetched commands')),
 				catchError(this.handleError<any>('getCommands'))
 			);
+	}
+
+	/**
+	 * @author | Pranto
+	 * @description | Get all event history
+	 */
+	getEventHistory(): Observable<any> | any {
+		const url = "https://python.uiiapi.co.uk/launcher/admin/events-history";
+		// let queryParams = {
+		// 	"start_date": "",
+		// 	"end_date": "",
+		// 	"status": "",
+		// 	"page_number": 0
+		// }
+		// let queryParams = new HttpParams();
+		// queryParams = queryParams.append("start_date", "");
+		// queryParams = queryParams.append("end_date", "");
+		// queryParams = queryParams.append("status", "");
+		// queryParams = queryParams.append("page_number", 0);
+
+		// return this.httpClient.get<EventHistory>(url, {params:queryParams});
+
+
 	}
 
 	/**

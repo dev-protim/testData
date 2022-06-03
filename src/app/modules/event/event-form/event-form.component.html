@@ -9,7 +9,7 @@
                 <div class="custom-input__label">
                     <label for="" class="custom-input__label">Choose Business</label>
                 </div>
-                <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" nzDropdownClassName="select-dropdown" formControlName="business_id" nzPlaceHolder="Select business" (ngModelChange)="showDevices($event)">
+                <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" formControlName="business_id" nzPlaceHolder="Select business" (ngModelChange)="showDevices($event)">
                     <nz-option *ngFor="let item of businessList" [nzLabel]="item.business_name" [nzValue]="item.business_id"></nz-option>
                 </nz-select>
                 <p *ngIf="packageUploadForm.get('business_id').invalid && (packageUploadForm.get('business_id').dirty || packageUploadForm.get('business_id').touched)" class="custom-input__error">
@@ -20,7 +20,7 @@
                 <div class="custom-input__label">
                     <label for="" class="custom-input__label">Choose Devices</label>
                 </div>
-                <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" nzDropdownClassName="select-dropdown" formControlName="device_id" nzPlaceHolder="Select a device" (ngModelChange)="showPackages($event)">
+                <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" formControlName="device_id" nzPlaceHolder="Select a device" (ngModelChange)="showPackages($event)">
                     <nz-option *ngFor="let item of deviceList[0]?.device_info" [nzLabel]="item.device_name" [nzValue]="item.device_id"></nz-option>
                 </nz-select>
                 <!-- <div class="custom-input__group c-pointer" nz-dropdown nzTrigger="click" [nzDropdownMenu]="deviceDropdown">

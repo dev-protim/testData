@@ -9,7 +9,7 @@ import { io, Socket } from 'socket.io-client';
 export class WebSocketService {
 
 	socket: any;
-	url: string = 'wss://43e2-103-113-175-2.ngrok.io/yolauncher';
+	url: string = 'wss://7044-103-113-175-2.ngrok.io/yolauncher';
 
 	constructor() {
 		this.socket = io(this.url, {

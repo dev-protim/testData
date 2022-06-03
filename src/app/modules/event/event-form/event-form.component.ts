@@ -4,7 +4,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { ApiCallService } from 'src/app/services/api-call/api-call.service';
 import { ModalControllerService } from 'src/app/services/modal-controller/modal-controller.service';
 import { WebSocketService } from 'src/app/services/web-socket/web-socket.service';
-import { Business, Data } from '../../dashboard/business/business';
+import { Business, Data } from '../../business/business';
 
 @Component({
 	selector: 'app-event-form',

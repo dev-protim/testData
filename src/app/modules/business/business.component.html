@@ -1,3 +1,12 @@
+<div class="dashboard-page__header s-margin-bottom">
+    <div class="dashboard-basic__info">
+        <h3>Business Page</h3>
+        <p>Get all of your businesses</p>
+    </div>
+    <!-- <button class="main-btn d-block d-lg-none" (click)="openEventForm()">Open Event Form</button> -->
+    <!-- <button class="main-btn" (click)="openUploadModal()">Add New Package</button> -->
+</div>
+<div class="s-margin-bottom"></div>
 <div class="dashboard-box">
     <div class="dashboard-box__header">
         <div class="dashboard-box__header--title">
@@ -45,7 +54,7 @@
                         <td>{{business.pin}}</td>
                         <td>
                             <div class="dashboard-table__buttons">
-                                <button class="main-btn" [routerLink]="['/dashboard/home/business-details', business.business_id]">Show Devices</button>
+                                <button class="main-btn" [routerLink]="['/dashboard/business/business-details', business.business_id]">Show Devices</button>
                             </div>
                         </td>
                     </tr>
@@ -71,3 +80,7 @@
         </ng-container>
     </div>
 </div>
+<!-- <app-event-history></app-event-history>
+
+<app-event-form></app-event-form> -->
+<!-- </div> -->

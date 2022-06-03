@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterEvent } from '@angular/router';
-import { filter, Observable, Subject } from 'rxjs';
+import { filter, Observable } from 'rxjs';
 import { ApiCallService } from 'src/app/services/api-call/api-call.service';
 import { LoaderService } from 'src/app/services/loader/loader.service';
-import { Business, Devices } from '../business/business';
+import { Devices } from '../business';
 
 @Component({
-	selector: 'app-business-details',
-	templateUrl: './business-details.component.html',
-	styleUrls: ['./business-details.component.scss']
+  selector: 'app-business-details',
+  templateUrl: './business-details.component.html',
+  styleUrls: ['./business-details.component.scss']
 })
 export class BusinessDetailsComponent implements OnInit {
 
-	// projectData: Observable<Project> | any;
+  // projectData: Observable<Project> | any;
 	businessList: Observable<Devices> | any;
 	routerEvent: any;
 	deviceId: any;
@@ -43,8 +43,6 @@ export class BusinessDetailsComponent implements OnInit {
 		}
 
 	ngOnInit(): void {
-
-		// console.log(this.isLoading);
 	}
 
 	/**
