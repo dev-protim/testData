@@ -71,7 +71,7 @@
                 <div class="custom-input__label">
                     <label for="" class="custom-input__label">Upload File</label>
                 </div>
-                <nz-upload nzType="drag" [nzMultiple]="false" nzListType="picture" [(nzFileList)]="fileList" [nzFileListRender]="customIcon" nzLimit="1" [nzBeforeUpload]="beforeFileUpload">
+                <nz-upload nzType="drag" [nzMultiple]="false" nzListType="picture" [(nzFileList)]="fileList" [nzFileListRender]="customIcon" nzLimit="1" [nzBeforeUpload]="beforeFileUpload" nzFileType="application/vnd.android.package-archive">
                     <p class="ant-upload-drag-icon">
                         <i class="flaticon-information-button"></i>
                     </p>
@@ -89,6 +89,9 @@
                         </div>
                     </ng-template>
                 </nz-upload>
+                <!-- <p *ngIf="packageUploadForm.get('packagePath').invalid && (packageUploadForm.get('packagePath').dirty || packageUploadForm.get('packagePath').touched)" class="custom-input__error">
+                    Please select a name
+                </p> -->
             </div>
 
         </form>
@@ -107,7 +110,7 @@
     <div class="modal-footer">
         <div class="modal-footer__buttons" *ngIf="!isUploadedStatus">
             <button class="main-btn main-btn__orange" (click)="closeUploadModal()">Cancel</button>
-            <button class="main-btn" (click)="handleUpload()" [disabled]="!packageUploadForm.invalid">Submit</button>
+            <button class="main-btn" (click)="handleUpload()" [disabled]="packageUploadForm.invalid && !fileList.length">Submit</button>
         </div>
         <div class="modal-footer__buttons" *ngIf="isUploadedStatus">
             <button class="main-btn" (click)="backToUploadForm()">Back</button>
