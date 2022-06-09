@@ -1,21 +1,19 @@
 <div class="dashboard-page__header s-margin-bottom">
     <div class="dashboard-basic__info">
-        <h3>Business Page</h3>
-        <p>Get all of your businesses</p>
+        <h3>Device Page</h3>
+        <p>Get all of your conencted devices</p>
     </div>
     <!-- <button class="main-btn d-block d-lg-none" (click)="openEventForm()">Open Event Form</button> -->
     <!-- <button class="main-btn" (click)="openUploadModal()">Add New Package</button> -->
 </div>
 <div class="s-margin-bottom"></div>
-<div class="dashboard-box">
+<!-- <div class="dashboard-box">
     <div class="dashboard-box__header">
         <div class="dashboard-box__header--title">
             <h3>Business Lists</h3>
             <p>Lorem ipsum dolor sit amet consectetur </p>
         </div>
         <div class="dashboard-box__header--buttons">
-            <!-- <button class="main-btn">Create Package</button> -->
-            <!-- <button class="main-btn" (click)="openPathValidationModal()">Check Paths</button> -->
         </div>
     </div>
     <div class="dashboard-box__body">
@@ -61,8 +59,6 @@
                 </tbody>
             </table>
         </div>
-        <!-- <div *ngIf="businessList.data.length">
-		</div> -->
         <ng-container *ngIf="businessList.data.length > 10">
             <nz-pagination [(nzPageIndex)]="page" [nzTotal]="businessList.data.length" [(nzPageSize)]="pageSize" (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)" [nzItemRender]="prev" [nzShowTotal]="rangeTemplate" [nzHideOnSinglePage]="true"></nz-pagination>
             <ng-template #prev let-type let-page="page">
@@ -79,8 +75,71 @@
             </ng-template>
         </ng-container>
     </div>
+</div> -->
+<div class="dashboard-box">
+    <div class="dashboard-box__header">
+        <div class="dashboard-box__header--title">
+            <h3>Device Lists</h3>
+            <p>Lorem ipsum dolor sit amet consectetur </p>
+        </div>
+        <!-- <div class="dashboard-box__header--buttons">
+            <button class="main-btn">Create Package</button>
+            <button class="main-btn" (click)="openPathValidationModal()">Check Paths</button>
+        </div> -->
+    </div>
+    <ng-container *ngIf="isLoading">
+        <div class="device-shimmer">
+            <div class="shimmer-animation device-shimmer__text"></div>
+            <div class="shimmer-animation device-shimmer__text"></div>
+        </div>
+        <div class="device-shimmer">
+            <div class="shimmer-animation device-shimmer__text"></div>
+            <div class="shimmer-animation device-shimmer__text"></div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="!isLoading">
+        <div class="dashboard-box__body device-item" *ngFor="let item of businessList?.data; let i = index;" [ngClass]="{'device-item__expanded': item.expand}">
+            <div class="device-item__info" (click)="togglePackageTable(i, $event)">
+                <h3><span [ngClass]="{'is-connected': item.is_connected}"></span> {{item.device_name}}</h3>
+                <p>ID: {{item.device_id}}</p>
+            </div>
+            <div class="device-item__products">
+                <div class="dashboard-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Path</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let package of item?.packages">
+                                <td>{{package.package_name}}</td>
+                                <td>
+                                    <ng-container *ngIf="package.apk_path"><span #packagePath>{{package.apk_path}}</span><button class="main-btn" (click)="copyInput(packagePath, package)">{{package.copy | titlecase}}</button></ng-container>
+                                    <ng-container *ngIf="!package.apk_path">No path available for this package</ng-container>
+                                </td>
+                                <td>{{package.type | titlecase}}</td>
+                                <td>
+                                    <ng-container *ngIf="package.is_installed">Active</ng-container>
+                                    <ng-container *ngIf="!package.is_installed">Deactive</ng-container>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="dashboard-box__body" *ngIf="!businessList?.data.length">
+            <div class="dashboard-box__empty">
+                <img src="assets/img/empty.png" alt="Empty">
+                <p>{{errorMessage}}</p>
+            </div>
+        </div>
+    </ng-container>
 </div>
-<!-- <app-event-history></app-event-history>
 
-<app-event-form></app-event-form> -->
+<!--<app-event-form></app-event-form> -->
 <!-- </div> -->

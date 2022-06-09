@@ -10,7 +10,7 @@
         </div>
     </div>
     <div class="dashboard-box__body">
-        <div class="dashboard-table" *ngIf="packageList?.length !== 0">
+        <div class="dashboard-table" *ngIf="isLoading">
             <table>
                 <thead>
                     <tr>
@@ -23,6 +23,38 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <tr>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="dashboard-table" *ngIf="!isLoading && packageList?.length !== 0">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Path</th>
+                        <th>Type</th>
+                        <th>Date <i class="flaticon-information-button" nzTooltipTitle="Package created date" nzTooltipPlacement="topLeft" nz-tooltip></i></th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="!isLoading">
                     <tr *ngFor="let package of packageList?.data; let i = index;">
                         <td>{{package.package_name}}</td>
                         <td>
@@ -45,9 +77,9 @@
                 </tbody>
             </table>
         </div>
-        <div class="dashboard-box__empty" *ngIf="packageList?.length === 0">
+        <div class="dashboard-box__empty" *ngIf="!isLoading && packageList?.length === 0">
             <img src="assets/img/empty.png" alt="Empty">
-            <p>No data found</p>
+            <p>{{noPackageString}}</p>
         </div>
     </div>
 </div>
@@ -64,14 +96,14 @@
                 </div>
                 <div class="custom-input__group">
                     <div class="custom-input__append"><i class="flaticon-add"></i></div>
-                    <input type="text" class="custom-input__field" placeholder="Email" [value]="isPackageInfo?.package_name" formControlName="name" readonly>
+                    <input type="text" class="custom-input__field" placeholder="Package name" [value]="isPackageInfo?.package_name" formControlName="name" readonly>
                 </div>
             </div>
             <div class="custom-input mb-0">
                 <div class="custom-input__label">
                     <label for="" class="custom-input__label">Upload File</label>
                 </div>
-                <nz-upload nzType="drag" [nzMultiple]="false" nzListType="picture" [(nzFileList)]="fileList" [nzFileListRender]="customIcon" nzLimit="1" [nzBeforeUpload]="beforeFileUpload" nzFileType="application/vnd.android.package-archive">
+                <nz-upload nzType="drag" [nzMultiple]="false" nzListType="picture" [(nzFileList)]="fileList" [nzFileListRender]="customIcon" nzLimit="1" [nzBeforeUpload]="beforeFileUpload">
                     <p class="ant-upload-drag-icon">
                         <i class="flaticon-information-button"></i>
                     </p>
@@ -125,14 +157,14 @@
 
 <nz-modal [(nzVisible)]="isUpdateModalVisible" nzTitle="Update Information" (nzOnCancel)="closeUpdateModal()" [nzFooter]="updatedPackageFooter" [nzCloseIcon]="updateModalCloseIcon">
     <ng-container *nzModalContent>
-        <form [formGroup]="packageUpdateForm" (ngSubmit)="handleUpdate()">
+        <form [formGroup]="packageUpdateForm" (ngSubmit)="handleUpdate()" *ngIf="!uploading">
             <div class="custom-input">
                 <div class="custom-input__label">
                     <label for="" class="custom-input__label">Package Name</label>
                 </div>
                 <div class="custom-input__group">
                     <div class="custom-input__append"><i class="flaticon-add"></i></div>
-                    <input type="text" class="custom-input__field" [value]="isPackageInfo?.package_name" formControlName="name" readonly>
+                    <input type="text" class="custom-input__field" placeholder="Package name" [value]="isPackageInfo?.package_name" formControlName="name" readonly>
                 </div>
             </div>
             <div class="custom-input">
@@ -155,6 +187,12 @@
                 <i class="flaticon-down-arrow"></i>
             </ng-template>
         </form>
+        <div class="path-uploading__status" *ngIf="uploading">
+            <img src="assets/img/loading.png" alt="Loading" class="loading-img" *ngIf="packageUpdateStatus === 'waiting'">
+            <i class="flaticon-verified t-col-success" *ngIf="packageUpdateStatus === 'success'"></i>
+            <i class="flaticon-close-circular-button-symbol t-col-danger" *ngIf="packageUpdateStatus === 'failed'"></i>
+            <p>{{packageUpdateMessage}}</p>
+        </div>
     </ng-container>
 </nz-modal>
 <ng-template #updateModalCloseIcon>
@@ -162,9 +200,13 @@
 </ng-template>
 <ng-template #updatedPackageFooter>
     <div class="modal-footer">
-        <div class="modal-footer__buttons">
+        <div class="modal-footer__buttons" *ngIf="!isUpdatedStatus">
             <button class="main-btn main-btn__orange" (click)="closeUpdateModal()">Cancel</button>
             <button class="main-btn" (click)="handleUpdate()">Save</button>
+        </div>
+        <div class="modal-footer__buttons" *ngIf="isUpdatedStatus">
+            <button class="main-btn" (click)="backToUpdateForm()">Back</button>
+            <button class="main-btn main-btn__orange" (click)="closeUpdateModal()">Close</button>
         </div>
     </div>
 </ng-template>

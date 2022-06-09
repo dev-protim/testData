@@ -4,6 +4,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { ApiCallService } from 'src/app/services/api-call/api-call.service';
 import { ModalControllerService } from 'src/app/services/modal-controller/modal-controller.service';
 import { WebSocketService } from 'src/app/services/web-socket/web-socket.service';
+import { SubSink } from 'subsink';
 import { Business, Data } from '../../business/business';
 
 @Component({
@@ -11,7 +12,7 @@ import { Business, Data } from '../../business/business';
 	templateUrl: './event-form.component.html',
 	styleUrls: ['./event-form.component.scss']
 })
-export class EventFormComponent implements OnInit {
+export class EventFormComponent implements OnInit, OnDestroy {
 
 	packageUploadForm: any;
 	packageStatus: any[] = [true, false];
@@ -29,6 +30,7 @@ export class EventFormComponent implements OnInit {
 	connection: any;
 	isEventSent: boolean = false;
 	isEventModalMobile: boolean = false;
+	subs = new SubSink();
 
 	constructor(private fb: FormBuilder, private apiService: ApiCallService, private webSocket: WebSocketService, private modalController: ModalControllerService, private modal: NzModalService) {
 		/**
@@ -39,7 +41,8 @@ export class EventFormComponent implements OnInit {
 		// 	console.log(v, 'v');
 		// 	this.isLoading = v;
 		// });
-		this.apiService.getBusiness().subscribe((data: Business) => {
+		// this.apiService.getBusiness().subscribe((data: Business) => {
+		this.subs.sink = this.apiService.getBusiness().subscribe((data: any) => {
 			this.businessList = data.data;
 			this.businessList.forEach((element: any) => {
 				element['parentChecked'] = false;
@@ -50,7 +53,7 @@ export class EventFormComponent implements OnInit {
 			console.log(this.businessList);
 		});
 
-		this.apiService.getCommands().subscribe((data: any) => {
+		this.subs.sink = this.apiService.getCommands().subscribe((data: any) => {
 			this.commandList = data;
 			console.log(this.commandList);
 		});
@@ -182,10 +185,14 @@ export class EventFormComponent implements OnInit {
 		}
 		console.log(formObject, "object");
 		this.webSocket.sendMessage(formObject);
-		this.connection = this.webSocket.getMessage().subscribe((message: any) => {
+		this.subs.sink = this.webSocket.getMessage().subscribe((message: any) => {
 			this.message = message.status;
 			this.modalController.showAlertModal(this.message);
 		})
+		// this.connection = this.webSocket.getMessage().subscribe((message: any) => {
+		// 	this.message = message.status;
+		// 	this.modalController.showAlertModal(this.message);
+		// })
 		this.deviceList = [];
 		this.isVersion = false;
 		this.packageUploadForm.reset();
@@ -204,8 +211,8 @@ export class EventFormComponent implements OnInit {
 		this.isEventModalMobile = false;
 	}
 
-	// ngOnDestroy(): void {
-	// 	// this.connection.unsubscribe();
-	// }
+	ngOnDestroy(): void {
+		this.subs.unsubscribe();
+	}
 
 }

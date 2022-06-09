@@ -4,12 +4,22 @@ export interface Business {
 	data: Data[];
 }
 
+// export interface Data {
+// 	business_id: string | any;
+// 	business_name: string | any;
+// 	created_at: string | any;
+// 	pin: string | any;
+// 	device_info: Devices[] | any;
+// }
 export interface Data {
-	business_id: string | any;
-	business_name: string | any;
 	created_at: string | any;
-	pin: string | any;
-	device_info: Devices[] | any;
+	device_id: string | any;
+	device_mode: string | any;
+	device_name: string | any;
+	device_size: string | any;
+	device_type: string | any;
+	is_connected: string | any;
+	packages: Packages[] | any;
 }
 
 export interface Devices {

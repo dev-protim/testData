@@ -1,7 +1,9 @@
 {
     "platform_id": "1",
-    "bdom": "./assets/json-files",
+    "bdom": "https://python.uiiapi.co.uk/launcher/admin",
+    "ngrok": "https://8150-103-113-175-2.ngrok.io/launcher/admin",
     "idom": "yofoodie.co.uk",
+    "edom": "https://www.uiiapi.co.uk",
     "domain": "yolauncher.orderpoz.co.uk",
     "indty": 18,
     "short_name": "yolauncher",

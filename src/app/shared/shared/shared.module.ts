@@ -154,7 +154,7 @@ import { HelperModule } from 'src/app/helper-component/helper.module';
 	NzWaveModule,
 	NzResizableModule,
 	NzPipesModule,
-	InternationalPhoneNumber2Module
+	InternationalPhoneNumber2Module,
   ],
   providers: [ApiCallService],
   exports: [

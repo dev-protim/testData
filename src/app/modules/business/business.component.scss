@@ -1,12 +1,130 @@
-.dashboard {
-    &-table {
-        table {
-            th,
-            td {
-                &:last-child {
-                    width: 120px;
+// .dashboard {
+//     &-table {
+//         table {
+//             th,
+//             td {
+//                 &:last-child {
+//                     width: 120px;
+//                 }
+//             }
+//         }
+//     }
+// }
+@use 'variables' as abstract;
+@use 'mixins' as *;
+
+/**********************************
+ * Business details page styles
+**********************************/
+
+.device {
+    &-item {
+        &:not(:last-child) {
+            @include margin(0, 0, 25, 0);
+        }
+        &__info {
+            position: relative;
+            cursor: pointer;
+            @include padding(null, 30, null, null);
+            &:after {
+                content: "\f106";
+                font-family: Flaticon;
+                // width: 17px;
+                // height: 17px;
+                // background: transparent;
+                // border: 1px solid abstract.$primaryColor;
+                // border-radius: 50%;
+                position: absolute;
+                top: 0;
+                right: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                line-height: 12px;
+                color: var(--text-color);
+                transition: transform 0.3s ease;
+                @include font-size-em(20);
+                // @include respond-to(small) {
+                //     // width: 20px;
+                //     // height: 20px;
+                // }
+            }
+            h3 {
+                @include font-size-em(16);
+                pointer-events: none;
+                // @include font-weight(400);
+                span {
+                    width: 5px;
+                    height: 5px;
+                    border-radius: 50%;
+                    background-color: abstract.$danger;
+                    display: inline-block;
+                    line-height: 1;
+                    // vertical-align: middle;
+                    margin-right: 2px;
+                    position: relative;
+                    top: -2px;
+                    &.is-connected {
+                        background-color: abstract.$success;
+                    }
+                    // @include font-weight(400) // color: abstract.$primaryColor;
+                }
+                @include respond-to(small) {
+                    span {
+                        width: 7px;
+                        height: 7px;
+                    }
                 }
             }
+            p {
+                @include font-size-em(14);
+                pointer-events: none;
+            }
+        }
+        &__products {
+            height: 0;
+            transition: all 0.3s ease, opacity 0.2s ease;
+            // opacity: 0;
+            overflow: hidden;
+            .dashboard-table {
+                @include margin(12, null, null, null);
+                border-top: 1px solid rgba(abstract.$grayColor, 0.42);
+                @include padding(10, null, 0, null);
+            }
+        }
+        &__expanded {
+            .device-item {
+                &__info {
+                    &:after {
+                        transform: rotate(180deg);
+                    }
+                }
+                &__products {
+                    // @include padding(12, null, null, null);
+                    // opacity: 1;
+                }
+            }
+        }
+    }
+    &-shimmer {
+        @include padding(15, 18, 15, 18);
+        @include box-shadow(0, 5, 17, 4, rgba(abstract.$grayColor, 0.16), null);
+        border-radius: 5px;
+        background-color: var(--theme-bg);
+        &__text {
+            height: 17px;
+            border-radius: 3px;
+            width: 200px;
+            max-width: 200px;
+            &:not(:last-child) {
+                @include margin(null, null, 7, null);
+            }
+            @include respond-to(small) {
+                height: 20px;
+            }
+        }
+        &:not(:last-child) {
+            @include margin(null, null, 25, null);
         }
     }
 }

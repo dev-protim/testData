@@ -1,7 +1,7 @@
-import { HttpClient, HttpHeaders, HttpEventType, HttpRequest, HttpResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpEventType, HttpRequest, HttpResponse, HttpParams, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
-import { Business, Devices } from 'src/app/modules/business/business';
+import { Business, Data, Devices } from 'src/app/modules/business/business';
 import { Package } from 'src/app/modules/dashboard/packages/package.class';
 import { ConfigService } from '../config/config.service';
 import { EventHistory } from 'src/app/modules/event/event-history/event.typing';
@@ -14,10 +14,22 @@ import { EventHistory } from 'src/app/modules/event/event-history/event.typing';
 })
 export class ApiCallService {
 
-	url: any = "https://jsonplaceholder.typicode.com/posts";
+	baseURL: string = "";
+	endpoint: any = {
+		"dashboard": "",
+		"packageUpload": "",
+		"packageUpdate": "",
+		"business": ""
+	}
 
 	constructor(private httpClient: HttpClient,
-		private config: ConfigService) { }
+		private config: ConfigService) {
+			this.baseURL = this.config.baseURL;
+			this.endpoint.dashboard = this.config.baseURL + "/dashboard";
+			this.endpoint.packageUpload = this.config.baseURL + "/apk-upload";
+			this.endpoint.packageUpdate = this.config.baseURL + "/package/update";
+			this.endpoint.business = this.config.baseURL + "/business";
+		}
 
 	httpOptions = {
 		headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -28,64 +40,61 @@ export class ApiCallService {
 	 * @description | Get all packages
 	 */
 	getPackages(): Observable<Package[]> {
-		const url = this.config.rootURL + "/all_packages.json";
-		return this.httpClient.get<Package[]>(url)
+		return this.httpClient.get<Package[]>(this.endpoint.dashboard)
 			.pipe(
-				tap(_ => this.log('fetched packages')),
-				catchError(this.handleError<Package[]>('getPackages', []))
+				map(res => res)
 			);
 	}
 
-	/**
-	 * @author | Pranto
-	 * @description | Upload apk path in package list
-	 */
-	uploadPackagePath(formData: any, isProgressWidth: any, fileUploadMessage: any, progressStatus: any): any {
-		return this.httpClient.post(`${this.url}`, formData, {
-			reportProgress: true,
-			observe: "events"
-		})
-		.pipe(map(
-			(event: any) => {
-				if (event.type === HttpEventType.UploadProgress) {
-					isProgressWidth = Math.round(100 * event.loaded / event.total);
-					// console.log(this.isProgressWidth)
-				}
-				else if (event.type === HttpEventType.Response) {
-					isProgressWidth = 100;
-				}
-			}
-		))
-		.subscribe(
-			res => {
-				fileUploadMessage = "Your file is uploading...";
-				progressStatus = "normal";
-			},
-			error => {
-				fileUploadMessage = "There is an error with your file upload.";
-				progressStatus = "exception";
-			},
-			() => {
-				fileUploadMessage = "Your file uploaded successfully!";
-				progressStatus = "success";
-			}
+	// Update package information
+	updateInformation(data: any) {
+		return this.httpClient.post(this.endpoint.packageUpdate, data, {
+			observe: 'events'
+		}).
+		pipe(
+			map(res => res)
 		)
+
 	}
 
-	/**
-	 * @author | Pranto
-	 * @description | Get all business
-	 */
-	getBusiness(): Observable<Business> {
-		const url = this.config.rootURL + "/business_info.json";
-		// const url = "https://e837-103-113-175-2.ngrok.io/launcher/admin/business";
-		return this.httpClient.get<Business>(url)
+	// Upload package path into image server
+	uploadPackagePath(data: any): any {
+		// const url = this.config.imageURL;
+		// return this.httpClient.post(`${url}`, data, {
+		// 	reportProgress: true,
+		// 	observe: "events"
+		// }).pipe(
+		// 	map(event => event)
+		// )
+		return this.httpClient.post(this.endpoint.packageUpload, data, {
+			reportProgress: true,
+			observe: 'events'
+		}).pipe(
+			map(event => event)
+		);
+
+	}
+
+	// Send uploaded file to python server
+	confirmUploadPackagePath(data: any): any {
+		return this.httpClient.post(this.endpoint.packageUpload, data, {
+			observe: 'events'
+		}).pipe(
+			map(event => event)
+		);
+	}
+
+	// Get business list
+	getBusiness(): Observable<Data> {
+		return this.httpClient.get<Data>(this.endpoint.business)
 			.pipe(
-				tap(_ => this.log('fetched businesses')),
-				catchError(this.handleError<Business>('getBusinesses'))
+				map(event => event)
+				// tap(_ => this.log('fetched businesses')),
+				// catchError(this.handleError<Data>('getBusinesses'))
 			);
 	}
 
+	// Get device details
 	getDeviceDetails(id: string) {
 		const url = this.config.rootURL + "/business_info.json";
 		return this.httpClient.get<Devices>(url).pipe(map((device: any) => {
@@ -93,10 +102,7 @@ export class ApiCallService {
 		}))
 	}
 
-	/**
-	 * @author | Pranto
-	 * @description | Get all commands from json
-	 */
+	// Get commands for event page form
 	getCommands(): Observable<any> {
 		const url = this.config.rootURL + "/event_command.json";
 		return this.httpClient.get<any>(url)
@@ -106,28 +112,25 @@ export class ApiCallService {
 			);
 	}
 
-	/**
-	 * @author | Pranto
-	 * @description | Get all event history
-	 */
-	getEventHistory(): Observable<any> | any {
-		const url = "https://python.uiiapi.co.uk/launcher/admin/events-history";
-		// let queryParams = {
-		// 	"start_date": "",
-		// 	"end_date": "",
-		// 	"status": "",
-		// 	"page_number": 0
-		// }
-		// let queryParams = new HttpParams();
-		// queryParams = queryParams.append("start_date", "");
-		// queryParams = queryParams.append("end_date", "");
-		// queryParams = queryParams.append("status", "");
-		// queryParams = queryParams.append("page_number", 0);
+	// Get event history
+	// getEventHistory(): Observable<any> | any {
+	// 	const url = "https://python.uiiapi.co.uk/launcher/admin/events-history";
+	// 	// let queryParams = {
+	// 	// 	"start_date": "",
+	// 	// 	"end_date": "",
+	// 	// 	"status": "",
+	// 	// 	"page_number": 0
+	// 	// }
+	// 	// let queryParams = new HttpParams();
+	// 	// queryParams = queryParams.append("start_date", "");
+	// 	// queryParams = queryParams.append("end_date", "");
+	// 	// queryParams = queryParams.append("status", "");
+	// 	// queryParams = queryParams.append("page_number", 0);
 
-		// return this.httpClient.get<EventHistory>(url, {params:queryParams});
+	// 	// return this.httpClient.get<EventHistory>(url, {params:queryParams});
 
 
-	}
+	// }
 
 	/**
    * Handle Http operation that failed.

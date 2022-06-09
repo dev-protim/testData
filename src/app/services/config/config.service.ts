@@ -44,12 +44,13 @@ export class ConfigService {
 	}
 
 	setIntoVariable(res: any) {
-		// this.baseURL = res.bdom + "/eat";
+		// this.baseURL = res.bdom;
+		this.baseURL = res.ngrok;
 		this.rootURL = res.bdom;
 		this.socketUrl = res.bdom;
 		// this.getIp = res.bdom + "/getIP";
 		this.app_module_id = res.app_module_id;
-		this.imageURL = res.edom;
+		this.imageURL = res.edom + "/global/files-upload";
 		this.secretKey = res?.sKey;
 		this.idom = res?.idom;
 		this.version = res?.version,
