@@ -1,0 +1,12 @@
+@use 'variables' as abstract;
+@use 'mixins' as *;
+
+/**********************************
+ * Event styles
+**********************************/
+
+.event-section {
+    @include respond-to(medium) {
+        padding-right: var(--history-panel-width);
+    }
+}

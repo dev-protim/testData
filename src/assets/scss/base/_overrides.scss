@@ -221,13 +221,14 @@
         }
     }
     &-body {
-        @include abstract.padding(13, 20, 13, 20);
+        @include abstract.padding(0, 0, 0, 0);
         font-size: 1em;
-        max-height: 585px;
-        @include abstract.scrollbar(5px, abstract.$grayColor, transparent);
-        overflow: auto;
+        // max-height: 585px;
+        // @include abstract.scrollbar(5px, abstract.$grayColor, transparent);
+        // overflow: auto;
     }
     &-footer {
+        display: none;
         @include abstract.padding(13, 20, 13, 20);
         border-top: 1px solid rgba(abstract.$grayColor, 0.42);
     }
@@ -253,6 +254,8 @@
                     line-height: 1;
                     @include abstract.margin(null, null, 3.5, null);
                     display: block;
+                    position: relative;
+                    top: 2px;
                 }
                 p {
                     margin-bottom: 0;
@@ -341,6 +344,18 @@
     }
 }
 
+.ant-select-item-empty {
+    text-align: center;
+    color: abstract.$grayColor;
+    img {
+        max-width: 40px;
+        @include abstract.margin(2, null, null, null);
+    }
+    p {
+        @include abstract.margin(4, null, null, null);
+    }
+}
+
 // .select-dropdown {
 // }
 .ant-select-dropdown {
@@ -377,6 +392,38 @@
     }
 }
 
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) .ant-select-item-option-state {
+    color: abstract.$primaryColor;
+}
+
+.ant-select-multiple {
+    .ant-select-selection-placeholder {
+        left: 1em;
+    }
+    .ant-select-selection-search {
+        // pointer-events: none;
+        display: none;
+    }
+    .ant-select-selection-item {
+        background: abstract.$primaryColor;
+        border-radius: 3px;
+        color: var(--theme-bg);
+        transition: color 0.3s linear;
+        padding: 0 5px;
+    }
+    .ant-select-selection-item-remove {
+        color: abstract.$grayColor;
+        &:hover {
+            color: var(--theme-bg);
+        }
+        &>.anticon {
+            vertical-align: middle;
+            position: relative;
+            top: -1px;
+        }
+    }
+}
+
 // Event history sort select
 .event-history__sort {
     height: 39px;
@@ -396,6 +443,19 @@
         width: 120px;
         .ant-select-arrow {
             margin-top: -8px;
+        }
+    }
+}
+
+// Group page
+.ant-select.group-select {
+    height: auto;
+    .ant-select-selector {
+        cursor: pointer !important;
+        .ant-select-selection-item {
+            flex: 0 0 auto;
+            width: calc(50% - 4px);
+            @include abstract.font-size-em(14);
         }
     }
 }

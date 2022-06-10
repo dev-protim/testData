@@ -1,1 +1,16 @@
-<p>group works!</p>
+<div class="event-section">
+    <div class="dashboard-page__header s-margin-bottom">
+        <div class="dashboard-basic__info">
+            <h3>Group Page</h3>
+            <p>See your created groups</p>
+        </div>
+        <button class="main-btn d-block d-lg-none" (click)="openEventForm()">Create Group</button>
+        <!-- <button class="main-btn" (click)="openUploadModal()">Add New Package</button> -->
+    </div>
+    <div class="s-margin-bottom"></div>
+    <app-group-list [newGroup]="newGroup"></app-group-list>
+    <!-- <app-event-history></app-event-history> -->
+
+    <app-create-group (emitter)="send($event)"></app-create-group>
+    <!-- <app-event-form></app-event-form> -->
+</div>

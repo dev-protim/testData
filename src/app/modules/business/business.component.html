@@ -98,10 +98,14 @@
         </div>
     </ng-container>
     <ng-container *ngIf="!isLoading">
-        <div class="dashboard-box__body device-item" *ngFor="let item of businessList?.data; let i = index;" [ngClass]="{'device-item__expanded': item.expand}">
+        <div class="dashboard-box__body device-item" *ngFor="let item of businessList; let i = index;" [ngClass]="{'device-item__expanded': item.expand}">
             <div class="device-item__info" (click)="togglePackageTable(i, $event)">
                 <h3><span [ngClass]="{'is-connected': item.is_connected}"></span> {{item.device_name}}</h3>
                 <p>ID: {{item.device_id}}</p>
+                <p>Mode: {{item.device_mode | titlecase}}</p>
+                <p>Size: {{item.device_size}}</p>
+                <p>Type: {{item.device_type | titlecase}}</p>
+                <p>Created Date: {{item.created_at | date: 'dd/MM/yyyy'}}</p>
             </div>
             <div class="device-item__products">
                 <div class="dashboard-table">
@@ -132,7 +136,7 @@
                 </div>
             </div>
         </div>
-        <div class="dashboard-box__body" *ngIf="!businessList?.data.length">
+        <div class="dashboard-box__body" *ngIf="!businessList.length">
             <div class="dashboard-box__empty">
                 <img src="assets/img/empty.png" alt="Empty">
                 <p>{{errorMessage}}</p>

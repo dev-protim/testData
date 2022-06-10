@@ -6,11 +6,17 @@
 
 .modal {
     &-body {
-        padding: 0;
+        @include abstract.padding(13, 20, 13, 20);
+        max-height: 585px;
+        @include abstract.scrollbar(5px, abstract.$grayColor, transparent);
+        overflow: auto;
+        // padding: 0;
         p {
             @include abstract.font-size-em(15);
             color: var(--text-color);
-            @include abstract.margin(null, null, 10, null);
+            &:not(:last-child) {
+                @include abstract.margin(null, null, 10, null);
+            }
         }
         ul {
             li {
@@ -31,6 +37,8 @@
         }
     }
     &-footer {
+        @include abstract.padding(13, 20, 13, 20);
+        border-top: 1px solid rgba(abstract.$grayColor, 0.42);
         &__buttons {
             .main-btn {
                 &:not(:last-child) {

@@ -55,22 +55,22 @@
                     </tr>
                 </thead>
                 <tbody *ngIf="!isLoading">
-                    <tr *ngFor="let package of packageList?.data; let i = index;">
+                    <tr *ngFor="let package of packageList; let i = index;">
                         <td>{{package.package_name}}</td>
                         <td>
                             <ng-container *ngIf="package.apk_path"><span #packagePath>{{package.apk_path}}</span><button class="main-btn" (click)="copyInput(packagePath, package)">{{package.copy | titlecase}}</button></ng-container>
                             <ng-container *ngIf="!package.apk_path">No path available for this package</ng-container>
                         </td>
                         <td>{{package.type | titlecase}}</td>
-                        <td>{{package.created_at | titlecase}}</td>
+                        <td>{{package.created_at | date: 'dd/MM/yyyy'}}</td>
                         <td>
                             <ng-container *ngIf="package.status === true">Active</ng-container>
                             <ng-container *ngIf="package.status === false">Deactive</ng-container>
                         </td>
                         <td>
                             <div class="dashboard-table__buttons">
-                                <button class="main-btn" (click)="openUpdateModal(package)">Update</button>
-                                <button class="main-btn main-btn__border" (click)="openUploadModal(package)">Upload</button>
+                                <button class="main-btn" (click)="openUpdateModal(i)">Update</button>
+                                <button class="main-btn main-btn__border" (click)="openUploadModal(i)">Upload</button>
                             </div>
                         </td>
                     </tr>
@@ -96,7 +96,7 @@
                 </div>
                 <div class="custom-input__group">
                     <div class="custom-input__append"><i class="flaticon-add"></i></div>
-                    <input type="text" class="custom-input__field" placeholder="Package name" [value]="isPackageInfo?.package_name" formControlName="name" readonly>
+                    <input type="text" class="custom-input__field" placeholder="Package name" [value]="packageInfo?.package_name" formControlName="name" readonly>
                 </div>
             </div>
             <div class="custom-input mb-0">
@@ -164,7 +164,7 @@
                 </div>
                 <div class="custom-input__group">
                     <div class="custom-input__append"><i class="flaticon-add"></i></div>
-                    <input type="text" class="custom-input__field" placeholder="Package name" [value]="isPackageInfo?.package_name" formControlName="name" readonly>
+                    <input type="text" class="custom-input__field" placeholder="Package name" [value]="packageInfo?.package_name" formControlName="name" readonly>
                 </div>
             </div>
             <div class="custom-input">

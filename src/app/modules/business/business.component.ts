@@ -3,7 +3,8 @@ import { Observable } from 'rxjs';
 import { ApiCallService } from 'src/app/services/api-call/api-call.service';
 import { LoaderService } from 'src/app/services/loader/loader.service';
 import { SubSink } from 'subsink';
-import { Business, Data, Devices } from './business';
+// import { Business, Data, Devices } from './business';
+import { Devices } from './business';
 
 @Component({
   selector: 'app-business',
@@ -13,7 +14,7 @@ import { Business, Data, Devices } from './business';
 export class BusinessComponent implements OnInit, OnDestroy {
 
 	// businessList: Business = {msg: '', status: '', data: []};
-	businessList: Observable<Data> | any;
+	businessList: Devices[] = [];
 	page: any = 1;
 	pageSize: any = 10;
 	isLoading: boolean | any = true;
@@ -30,27 +31,29 @@ export class BusinessComponent implements OnInit, OnDestroy {
 		// 	this.isLoading = v;
 		// });
 		this.subs.sink = this.apiService.getBusiness().subscribe(
-		(data: Data) => {
-			this.businessList = data;
-			if (this.businessList.status === 200) {
+		data => {
+			if (data.statusCode === 200) {
+				this.businessList = data.data;
 				this.isLoading = false;
-				this.businessList.data.forEach((element: any) => {
+				this.businessList.forEach((element: any) => {
+					element.created_at = element.created_at.split(" ")[0];
 					element.packages.forEach((p: any) => {
 						p["copy"] = "copy";
 					});
 				});
 			} else {
-				this.errorMessage = this.businessList.msg;
+				this.errorMessage = data.msg;
 			}
 			console.log(this.businessList);
 		},
 		error => {
+			console.log(error);
 			this.isLoading = false;
-			if (error?.msg) {
-				this.errorMessage = error?.msg;
-			} else {
-				this.errorMessage = error?.error.detail;
-			}
+			// if (error?.msg) {
+			// 	this.errorMessage = error?.msg;
+			// } else {
+			// }
+			this.errorMessage = error?.message;
 		});
 		// data => {
 		// 	this.packageList = data;
@@ -99,15 +102,16 @@ export class BusinessComponent implements OnInit, OnDestroy {
 	}
 
 	togglePackageTable(index: number, event: any): void {
+		console.log(this.businessList);
 		let packageTable: any = document.querySelectorAll('.device-item__products');
 		packageTable.forEach((element: any) => {
 			element.style.height = '0';
 		});
-		this.businessList.data[index].expand = !this.businessList.data[index].expand;
-		this.arrayExceptIndex(this.businessList.data, index);
+		this.businessList[index].expand = !this.businessList[index].expand;
+		this.arrayExceptIndex(this.businessList, index);
 		const targetElement = event.target.nextElementSibling;
 		const targetElementHeight = targetElement.scrollHeight;
-		if (this.businessList.data[index].expand === true) {
+		if (this.businessList[index].expand === true) {
 			targetElement.style.height = targetElementHeight + 'px';
 		} else {
 			targetElement.style.height = 0;

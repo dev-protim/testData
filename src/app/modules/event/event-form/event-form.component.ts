@@ -5,7 +5,7 @@ import { ApiCallService } from 'src/app/services/api-call/api-call.service';
 import { ModalControllerService } from 'src/app/services/modal-controller/modal-controller.service';
 import { WebSocketService } from 'src/app/services/web-socket/web-socket.service';
 import { SubSink } from 'subsink';
-import { Business, Data } from '../../business/business';
+// import { Business, Data } from '../../business/business';
 
 @Component({
 	selector: 'app-event-form',
@@ -18,7 +18,8 @@ export class EventFormComponent implements OnInit, OnDestroy {
 	packageStatus: any[] = [true, false];
 	packageType: any[] = ['launcher_apps', 'locker_apps', 'both'];
 	isInstalled: any[] = [true, false];
-	businessList: Data[] | any;
+	// businessList: Data[] | any;
+	businessList:  any;
 	deviceList: any;
 	packageList: any = [];
 	masterSelected: any;
@@ -187,7 +188,7 @@ export class EventFormComponent implements OnInit, OnDestroy {
 		this.webSocket.sendMessage(formObject);
 		this.subs.sink = this.webSocket.getMessage().subscribe((message: any) => {
 			this.message = message.status;
-			this.modalController.showAlertModal(this.message);
+			// this.modalController.showAlertModal(this.message);
 		})
 		// this.connection = this.webSocket.getMessage().subscribe((message: any) => {
 		// 	this.message = message.status;

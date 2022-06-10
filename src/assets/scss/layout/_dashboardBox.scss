@@ -41,6 +41,8 @@
         &__empty {
             text-align: center;
             @include abstract.padding(15, 18, 15, 18);
+            max-width: 420px;
+            margin-inline: auto;
             img {
                 max-width: 70px;
                 @include abstract.margin(null, null, 10, null);

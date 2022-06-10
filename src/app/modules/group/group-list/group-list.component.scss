@@ -1,15 +1,3 @@
-// .dashboard {
-//     &-table {
-//         table {
-//             th,
-//             td {
-//                 &:last-child {
-//                     width: 120px;
-//                 }
-//             }
-//         }
-//     }
-// }
 @use 'variables' as abstract;
 @use 'mixins' as *;
 
@@ -79,9 +67,6 @@
             p {
                 @include font-size-em(14);
                 pointer-events: none;
-                &:not(:last-child) {
-                    @include margin(0, 0, 4, 0);
-                }
             }
         }
         &__products {

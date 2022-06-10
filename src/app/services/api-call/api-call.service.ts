@@ -1,8 +1,9 @@
 import { HttpClient, HttpHeaders, HttpEventType, HttpRequest, HttpResponse, HttpParams, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
-import { Business, Data, Devices } from 'src/app/modules/business/business';
-import { Package } from 'src/app/modules/dashboard/packages/package.class';
+// import { Business, Data, Devices } from 'src/app/modules/business/business';
+import { Devices } from 'src/app/modules/business/business';
+import { Package } from 'src/app/modules/dashboard/packages/package';
 import { ConfigService } from '../config/config.service';
 import { EventHistory } from 'src/app/modules/event/event-history/event.typing';
 // throwError
@@ -19,7 +20,11 @@ export class ApiCallService {
 		"dashboard": "",
 		"packageUpload": "",
 		"packageUpdate": "",
-		"business": ""
+		"business": "",
+		"groupCreate": "",
+		"groupLists": "",
+		"groupUpdate": "",
+		"groupDelete": "",
 	}
 
 	constructor(private httpClient: HttpClient,
@@ -29,7 +34,13 @@ export class ApiCallService {
 			this.endpoint.packageUpload = this.config.baseURL + "/apk-upload";
 			this.endpoint.packageUpdate = this.config.baseURL + "/package/update";
 			this.endpoint.business = this.config.baseURL + "/business";
+			this.endpoint.groupCreate = this.config.baseURL + "/device-group/create";
+			this.endpoint.groupLists = this.config.baseURL + "/get-device_group";
+			this.endpoint.groupUpdate = this.config.baseURL + "/device-group/update";
+			this.endpoint.groupDelete = this.config.baseURL + "/device-group/delete";
 		}
+
+
 
 	httpOptions = {
 		headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -39,16 +50,20 @@ export class ApiCallService {
 	 * @author | Pranto
 	 * @description | Get all packages
 	 */
-	getPackages(): Observable<Package[]> {
-		return this.httpClient.get<Package[]>(this.endpoint.dashboard)
-			.pipe(
-				map(res => res)
+	getPackages(): Observable<any> {
+		return this.httpClient.get(this.endpoint.dashboard, {
+			// observe: 'response'
+		}).pipe(
+				map(event => {
+					console.log(event);
+					return event;
+				})
 			);
 	}
 
 	// Update package information
 	updateInformation(data: any) {
-		return this.httpClient.post(this.endpoint.packageUpdate, data, {
+		return this.httpClient.post(this.endpoint.packageUpdate,  data, {
 			observe: 'events'
 		}).
 		pipe(
@@ -76,17 +91,17 @@ export class ApiCallService {
 	}
 
 	// Send uploaded file to python server
-	confirmUploadPackagePath(data: any): any {
-		return this.httpClient.post(this.endpoint.packageUpload, data, {
-			observe: 'events'
-		}).pipe(
-			map(event => event)
-		);
-	}
+	// confirmUploadPackagePath(data: any): any {
+	// 	return this.httpClient.post(this.endpoint.packageUpload, data, {
+	// 		observe: 'events'
+	// 	}).pipe(
+	// 		map(event => event)
+	// 	);
+	// }
 
 	// Get business list
-	getBusiness(): Observable<Data> {
-		return this.httpClient.get<Data>(this.endpoint.business)
+	getBusiness(): Observable<any> {
+		return this.httpClient.get(this.endpoint.business)
 			.pipe(
 				map(event => event)
 				// tap(_ => this.log('fetched businesses')),
@@ -100,6 +115,23 @@ export class ApiCallService {
 		return this.httpClient.get<Devices>(url).pipe(map((device: any) => {
 			return device.data.filter((device: any) => device.business_id === id)[0];
 		}))
+	}
+
+	// Get group lists
+	getGroups(): Observable<any> {
+		return this.httpClient.get(this.endpoint.groupLists, {
+		}).pipe(
+				map(list => list)
+			);
+	}
+
+	// Submit group create form
+	createGroup(data: any) {
+		return this.httpClient.post(this.endpoint.groupCreate, data).
+		pipe(
+			map(res => res)
+		)
+
 	}
 
 	// Get commands for event page form

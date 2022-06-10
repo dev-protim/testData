@@ -4,26 +4,26 @@
  * Path uploading status styles
  ********************************************/
 
-@keyframes loading {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
+// @keyframes loading {
+//     0% {
+//         transform: rotate(0deg);
+//     }
+//     100% {
+//         transform: rotate(360deg);
+//     }
+// }
 .path-uploading {
     &__status {
         text-align: center;
+        @include abstract.padding(15, 15, 15, 15);
         &>i {
             @include abstract.font-size-em(50);
         }
-        .loading-img {
-            @include abstract.font-size-em(50);
-            width: 1em;
-            height: 1em;
-            animation: loading 1.7s linear infinite;
+        .loading-icon {
+            // @include abstract.font-size-em(50);
+            // width: 1em;
+            // height: 1em;
+            // animation: loading 1.7s linear infinite;
             @include abstract.margin(0, 0, 7, 0);
         }
         p {
