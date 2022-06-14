@@ -25,6 +25,10 @@ export class ApiCallService {
 		"groupLists": "",
 		"groupUpdate": "",
 		"groupDelete": "",
+		"createWallpaper": "",
+		"getWallpaper": "",
+		"changeWallpaper": "",
+		"deleteWallpaper": "",
 	}
 
 	constructor(private httpClient: HttpClient,
@@ -38,6 +42,10 @@ export class ApiCallService {
 			this.endpoint.groupLists = this.config.baseURL + "/get-device_group";
 			this.endpoint.groupUpdate = this.config.baseURL + "/device-group/update";
 			this.endpoint.groupDelete = this.config.baseURL + "/device-group/delete";
+			this.endpoint.createWallpaper = this.config.baseURL + "/create-wallpaper";
+			this.endpoint.getWallpaper = this.config.baseURL + "/get-wallpapers";
+			this.endpoint.changeWallpaper = this.config.baseURL + "/change-wallpaper";
+			this.endpoint.deleteWallpaper = this.config.baseURL + "/delete-wallpaper";
 		}
 
 
@@ -64,7 +72,6 @@ export class ApiCallService {
 	// Update package information
 	updateInformation(data: any) {
 		return this.httpClient.post(this.endpoint.packageUpdate,  data, {
-			observe: 'events'
 		}).
 		pipe(
 			map(res => res)
@@ -87,7 +94,6 @@ export class ApiCallService {
 		}).pipe(
 			map(event => event)
 		);
-
 	}
 
 	// Send uploaded file to python server
@@ -132,6 +138,56 @@ export class ApiCallService {
 			map(res => res)
 		)
 
+	}
+
+	// Delete group
+	deleteGroup(data: any) {
+		// delete group from api by id
+		return this.httpClient.delete(this.endpoint.groupDelete + "/" + data).pipe(
+			map(res => res)
+		)
+	}
+
+	// Update group
+	updateGroup(data: any) {
+		return this.httpClient.post(this.endpoint.groupUpdate, data).
+		pipe(
+			map(res => res)
+		)
+	}
+
+	// Submit wallpaper create form
+	createWallpaper(data: any) {
+		return this.httpClient.post(this.endpoint.createWallpaper, data).
+		pipe(
+			map(res => res)
+		)
+
+	}
+
+	// Get wallpaper list
+	getWallpaper() {
+		return this.httpClient.get(this.endpoint.getWallpaper, {
+		}).pipe(
+			map(res => res)
+		)
+	}
+
+	// Delete wallpaper list
+	deleteWallpaper(data: any) {
+		return this.httpClient.delete(this.endpoint.deleteWallpaper + "/" + data).pipe(
+			map(res => res)
+		)
+	}
+
+	// Update wallpaper
+	updateWallpaper(data: any): any {
+		return this.httpClient.post(this.endpoint.changeWallpaper, data, {
+			reportProgress: true,
+			observe: 'events'
+		}).pipe(
+			map(res => res)
+		);
 	}
 
 	// Get commands for event page form

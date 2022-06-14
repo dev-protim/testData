@@ -81,7 +81,7 @@ import { HelperModule } from 'src/app/helper-component/helper.module';
   declarations: [
 	DashboardBasicInfoComponent,
 	KeyvaluePipe,
-	NumberOnlyDirective,
+	NumberOnlyDirective
 	// AlertModalComponent
   ],
   imports: [

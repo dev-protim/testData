@@ -1,0 +1,23 @@
+<div class="wallpaper-form" [ngClass]="{'active': isWallpaperModalMobile}">
+    <div class="wallpaper-form__title">
+        <h3>Create Wallpaper</h3>
+        <button class="close-icon d-block d-lg-none" (click)="closeWallpaperModalMobile()"><i class="flaticon-close"></i></button>
+    </div>
+    <div class="wallpaper-form__content">
+        <form [formGroup]="createWallpaperForm" (ngSubmit)="handleSubmit()">
+            <div class="custom-input">
+                <div class="custom-input__label">
+                    <label class="custom-input__label">Wallpaper Name</label>
+                </div>
+                <div class="custom-input__group">
+                    <div class="custom-input__append"><i class="flaticon-add"></i></div>
+                    <input type="text" class="custom-input__field" placeholder="Wallpaper name" formControlName="wallpaper_name">
+                </div>
+                <p *ngIf="createWallpaperForm.get('wallpaper_name').invalid && (createWallpaperForm.get('wallpaper_name').dirty || createWallpaperForm.get('wallpaper_name').touched)" class="custom-input__error">
+                    Please enter a name
+                </p>
+            </div>
+        </form>
+        <button class="main-btn" (click)="handleSubmit()" [disabled]="createWallpaperForm.invalid">Submit</button>
+    </div>
+</div>

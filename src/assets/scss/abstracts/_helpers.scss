@@ -25,6 +25,10 @@
     cursor: pointer;
 }
 
+.text-titlecase {
+    text-transform: capitalize;
+}
+
 // Font weight
 @for $i from 1 through 9 {
     .font-weight-#{$i * 100} {

@@ -27,6 +27,7 @@
         p {
             @include abstract.font-size-em(15);
             @include abstract.margin(null, 10, null, null);
+            margin-bottom: 0 !important;
             color: var(--theme-color);
         }
     }

@@ -5,12 +5,9 @@
             <p>See your created groups</p>
         </div>
         <button class="main-btn d-block d-lg-none" (click)="openEventForm()">Create Group</button>
-        <!-- <button class="main-btn" (click)="openUploadModal()">Add New Package</button> -->
     </div>
     <div class="s-margin-bottom"></div>
     <app-group-list [newGroup]="newGroup"></app-group-list>
-    <!-- <app-event-history></app-event-history> -->
 
-    <app-create-group (emitter)="send($event)"></app-create-group>
-    <!-- <app-event-form></app-event-form> -->
+    <app-create-group (createGroupEmitter)="createNewGroup($event)"></app-create-group>
 </div>

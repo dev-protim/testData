@@ -17,26 +17,41 @@
     </ng-container>
     <ng-container *ngIf="!isLoading">
         <div class="dashboard-box__body device-item" *ngFor="let item of groupList; let i = index;" [ngClass]="{'device-item__expanded': item.expand}">
-            <!-- <div class="device-item__info" (click)="togglePackageTable(i, $event)"> -->
             <div class="device-item__info">
-                <h3>{{item.group_name}}</h3>
-                <p>Number of Devices: {{item.devices.length}}</p>
+                <!-- <div class="device-item__info"> -->
+                <div class="device-item__info--content">
+                    <h3>{{item.group_name | titlecase}}</h3>
+                    <p>Number of Devices: {{item.devices.length}}</p>
+                </div>
+                <ul class="device-item__info--action">
+                    <li (click)="openGroupUpdateModal(i)"><i class="flaticon-pencil-1"></i></li>
+                    <li (click)="deleteGroup(item.id, i); $event.stopPropagation()"><i class="flaticon-trash"></i></li>
+                    <li class="device-item__expand" (click)="toggleDeviceTable(i, $event)"><i class="flaticon-down-chevron" style="pointer-events: none;"></i></li>
+                </ul>
             </div>
-            <!-- <div class="device-item__products">
-				<div class="dashboard-table">
-					<table>
-						<thead>
-							<tr>
-								<th>Name</th>
-								<th>Path</th>
-								<th>Type</th>
-								<th>Status</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr *ngFor="let package of item?.packages">
-								<td>{{package.package_name}}</td>
-								<td>
+            <div class="device-item__products">
+                <div class="dashboard-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Mode</th>
+                                <th>Size</th>
+                                <th>Type</th>
+                                <th>Date <i class="flaticon-information-button" nzTooltipTitle="Device created date" nzTooltipPlacement="topLeft" nz-tooltip></i></th>
+                                <!-- <th>Status</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let device of item?.devices">
+                                <td>{{device.device_id}}</td>
+                                <td><span [ngClass]="{'is-connected': device.is_connected}"></span>{{device.device_name}}</td>
+                                <td>{{device.device_mode | titlecase}}</td>
+                                <td>{{device.device_size}}</td>
+                                <td>{{device.device_type | titlecase}}</td>
+                                <td>{{device.created_at | date: 'dd/MM/yyyy'}}</td>
+                                <!-- <td>
 									<ng-container *ngIf="package.apk_path"><span #packagePath>{{package.apk_path}}</span><button class="main-btn" (click)="copyInput(packagePath, package)">{{package.copy | titlecase}}</button></ng-container>
 									<ng-container *ngIf="!package.apk_path">No path available for this package</ng-container>
 								</td>
@@ -44,12 +59,12 @@
 								<td>
 									<ng-container *ngIf="package.is_installed">Active</ng-container>
 									<ng-container *ngIf="!package.is_installed">Deactive</ng-container>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div> -->
+								</td> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
         <div class="dashboard-box__body" *ngIf="!groupList?.length">
             <div class="dashboard-box__empty">
@@ -60,3 +75,55 @@
     </ng-container>
     <p>{{newGroup?.name}}</p>
 </div>
+
+<!-------------------------------
+	// Update group
+-------------------------------->
+<nz-modal [(nzVisible)]="isUpdateModal" nzTitle="Update Group" (nzOnCancel)="closeGroupUpdateModal()" [nzCloseIcon]="modalCloseIcon">
+    <ng-container *nzModalContent>
+        <div class="modal-body">
+            <form [formGroup]="groupUpdateForm" (ngSubmit)="handleGroupUpdate()">
+                <div class="custom-input">
+                    <div class="custom-input__label">
+                        <label for="" class="custom-input__label">Package Name</label>
+                    </div>
+                    <div class="custom-input__group">
+                        <div class="custom-input__append"><i class="flaticon-add"></i></div>
+                        <input type="text" class="custom-input__field" placeholder="Package name" formControlName="group_name">
+                    </div>
+                    <p *ngIf="groupUpdateForm.get('group_name').invalid && (groupUpdateForm.get('group_name').dirty || groupUpdateForm.get('group_name').touched)" class="custom-input__error">
+                        Please enter a name
+                    </p>
+                </div>
+                <div class="custom-input">
+                    <div class="custom-input__label">
+                        <label class="custom-input__label">Choose Devices</label>
+                    </div>
+                    <nz-select class="custom-input__group group-select group-select-lg" [nzSuffixIcon]="arrowIcon" formControlName="device" nzPlaceHolder="Select devices" [nzNotFoundContent]="noDevices" nzMode="multiple" [nzShowSearch]="false">
+                        <nz-option *ngFor="let item of devices" [nzLabel]="item.device_name" [nzValue]="item.device_id"></nz-option>
+                    </nz-select>
+                    <ng-template #noDevices>
+                        <img src="assets/img/loading.png" alt="Loading" class="loading-icon" *ngIf="deviceResponse === 'waiting'">
+                        <img src="assets/img/empty.png" alt="Empty" *ngIf="deviceResponse === 'error'">
+                        <p>{{deviceResponseMessage}}</p>
+                    </ng-template>
+                    <p *ngIf="groupUpdateForm.get('device').invalid && (groupUpdateForm.get('device').dirty || groupUpdateForm.get('device').touched)" class="custom-input__error">
+                        Please select at least a device
+                    </p>
+                </div>
+                <ng-template #arrowIcon>
+                    <i class="flaticon-down-arrow"></i>
+                </ng-template>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="modal-footer__buttons">
+                <button class="main-btn main-btn__orange" (click)="closeGroupUpdateModal()">Cancel</button>
+                <button class="main-btn" (click)="handleGroupUpdate()" [disabled]="groupUpdateForm.invalid">Submit</button>
+            </div>
+        </div>
+    </ng-container>
+</nz-modal>
+<ng-template #modalCloseIcon>
+    <i class="flaticon-close"></i>
+</ng-template>

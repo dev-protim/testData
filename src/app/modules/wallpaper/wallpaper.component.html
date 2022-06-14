@@ -1,0 +1,14 @@
+<div class="event-section">
+    <div class="dashboard-page__header s-margin-bottom">
+        <div class="dashboard-basic__info">
+            <h3>Wallpaper Page</h3>
+            <p>See your created wallpapers</p>
+        </div>
+        <button class="main-btn d-block d-lg-none" (click)="openWallpaperForm()">Create Wallpaper</button>
+        <!-- <button class="main-btn" (click)="openUploadModal()">Add New Package</button> -->
+    </div>
+    <div class="s-margin-bottom"></div>
+    <app-wallpaper-list [newWallpaper]="newWallpaper"></app-wallpaper-list>
+
+    <app-create-wallpaper (createWallpaperEmitter)="sendWallpaperToList($event)"></app-create-wallpaper>
+</div>

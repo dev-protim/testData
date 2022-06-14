@@ -31,9 +31,9 @@ export class BusinessComponent implements OnInit, OnDestroy {
 		// 	this.isLoading = v;
 		// });
 		this.subs.sink = this.apiService.getBusiness().subscribe(
-		data => {
-			if (data.statusCode === 200) {
-				this.businessList = data.data;
+		response => {
+			if (response.statusCode === 200) {
+				this.businessList = response.data.filtered_data;
 				this.isLoading = false;
 				this.businessList.forEach((element: any) => {
 					element.created_at = element.created_at.split(" ")[0];
@@ -42,7 +42,7 @@ export class BusinessComponent implements OnInit, OnDestroy {
 					});
 				});
 			} else {
-				this.errorMessage = data.msg;
+				this.errorMessage = response.msg;
 			}
 			console.log(this.businessList);
 		},

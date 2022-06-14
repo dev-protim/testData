@@ -22,7 +22,7 @@
                     <label class="custom-input__label">Choose Devices</label>
                 </div>
                 <nz-select class="custom-input__group group-select" [nzSuffixIcon]="arrowIcon" formControlName="devices" nzPlaceHolder="Select devices" (ngModelChange)="showDevices($event)" [nzNotFoundContent]="noDevices" nzMode="multiple" [nzShowSearch]="false">
-                    <nz-option *ngFor="let item of dumyDevices" [nzLabel]="item.device_name" [nzValue]="item"></nz-option>
+                    <nz-option *ngFor="let item of devices" [nzLabel]="item.device_name" [nzValue]="item"></nz-option>
                 </nz-select>
                 <ng-template #noDevices>
                     <img src="assets/img/loading.png" alt="Loading" class="loading-icon" *ngIf="deviceResponse === 'waiting'">

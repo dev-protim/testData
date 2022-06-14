@@ -1,0 +1,160 @@
+<div class="dashboard-box">
+    <div class="dashboard-box__header">
+        <div class="dashboard-box__header--title">
+            <h3>Wallpaper Lists</h3>
+            <p>Lorem ipsum dolor sit amet consectetur </p>
+        </div>
+    </div>
+    <div class="dashboard-box__body">
+        <div class="dashboard-table" *ngIf="isLoading">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Portrait Image</th>
+                        <th>Landscape Image</th>
+                        <th>Date <i class="flaticon-information-button" nzTooltipTitle="Wallpaper created date" nzTooltipPlacement="topLeft" nz-tooltip></i></th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                        <td><span class="table-shimmer shimmer-animation"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="dashboard-table" *ngIf="!isLoading && wallpaperList?.length !== 0">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Portrait Image</th>
+                        <th>Landscape Image</th>
+                        <th>Date <i class="flaticon-information-button" nzTooltipTitle="Wallpaper created date" nzTooltipPlacement="topLeft" nz-tooltip></i></th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="!isLoading">
+                    <tr *ngFor="let wallpaper of wallpaperList; let i = index;">
+                        <td>{{wallpaper.wallpaper_name | titlecase}}</td>
+                        <td>
+                            <ng-container *ngIf="wallpaper.portrait"><span #portraitWallpaperPath>{{wallpaper.portrait}}</span><button class="main-btn" (click)="copyInput(portraitWallpaperPath, wallpaper, 'portrait')">{{wallpaper.portraitCopy | titlecase}}</button></ng-container>
+                            <ng-container *ngIf="!wallpaper.portrait">No image uploaded</ng-container>
+                        </td>
+                        <td>
+                            <ng-container *ngIf="wallpaper.landscape"><span #landscapeWallpaperPath>{{wallpaper.landscape}}</span><button class="main-btn" (click)="copyInput(landscapeWallpaperPath, wallpaper, 'landscape')">{{wallpaper.landscapeCopy | titlecase}}</button></ng-container>
+                            <ng-container *ngIf="!wallpaper.landscape">No image uploaded</ng-container>
+                        </td>
+                        <td>{{wallpaper.created_at | date: 'dd/MM/yyyy'}}</td>
+                        <td>
+                            <div class="dashboard-table__buttons">
+                                <button class="main-btn" (click)="openUpdateModal(i)">Update</button>
+                                <button class="main-btn main-btn__danger" (click)="deleteWallpaper(wallpaper.wallpaper_id, i)">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="dashboard-box__empty" *ngIf="!isLoading && wallpaperList?.length === 0">
+            <img src="assets/img/empty.png" alt="Empty">
+            <p>{{responseMessage}}</p>
+        </div>
+    </div>
+</div>
+
+
+<!-------------------------------
+	// Update package info modal
+-------------------------------->
+
+<nz-modal [(nzVisible)]="isUpdateModal" nzTitle="Update Wallpaper" (nzOnCancel)="closeUpdateModal()" [nzCloseIcon]="updateModalCloseIcon" [nzClosable]="!isWallpaperUploading || progressStatus === 'success' || progressStatus === 'exception'">
+    <ng-container *nzModalContent>
+        <div class="modal-body">
+            <form [formGroup]="updateWallpaperForm" (ngSubmit)="handleUpdate()" *ngIf="!isWallpaperUploading">
+                <div class="custom-input">
+                    <div class="custom-input__label">
+                        <label class="custom-input__label">Wallpaper Name</label>
+                    </div>
+                    <div class="custom-input__group">
+                        <div class="custom-input__append"><i class="flaticon-add"></i></div>
+                        <input type="text" class="custom-input__field text-titlecase" placeholder="Wallpaper name" formControlName="wallpaper_name" readonly>
+                    </div>
+                </div>
+                <div class="custom-input" [ngClass]="{'mb-0': updateWallpaperForm.get('mode').invalid}">
+                    <div class="custom-input__label">
+                        <label class="custom-input__label">Wallpaper Mode</label>
+                    </div>
+                    <nz-select class="custom-input__group" [nzSuffixIcon]="arrowIcon" nzDropdownClassName="select-dropdown" formControlName="mode" nzPlaceHolder="Select a mode">
+                        <nz-option *ngFor="let item of wallpaperMode" [nzLabel]="item | titlecase" [nzValue]="item"></nz-option>
+                    </nz-select>
+                    <p *ngIf="updateWallpaperForm.get('mode').invalid && (updateWallpaperForm.get('mode').dirty || updateWallpaperForm.get('mode').touched)" class="custom-input__error">
+                        Please select a mode
+                    </p>
+                </div>
+                <div class="custom-input mb-0" *ngIf="!updateWallpaperForm.get('mode').invalid">
+                    <div class="custom-input__label">
+                        <label class="custom-input__label">Upload File</label>
+                    </div>
+                    <nz-upload nzType="drag" [nzMultiple]="false" nzListType="picture" [(nzFileList)]="fileList" [nzFileListRender]="customIcon" nzLimit="1" [nzBeforeUpload]="beforeFileUpload" nzAccept="image/png,image/jpeg">
+                        <p class="ant-upload-drag-icon">
+                            <i class="flaticon-cloud-upload"></i>
+                        </p>
+                        <p class="ant-upload-text">Click or Drag file here</p>
+                        <p class="ant-upload-hint">Support png/jpg/jpeg file only</p>
+                        <ng-template #customIcon>
+                            <div class="uploaded-preview" *ngIf="fileList[0]">
+                                <div class="uploaded-preview__info">
+                                    <i class="flaticon-attachment"></i>
+                                    <p>{{fileList[0]?.name}}</p>
+                                    <div class="uploaded-preview__delete" (click)="removeUploadedFile()">
+                                        <i class="flaticon-trash"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </nz-upload>
+                    <p *ngIf="isFileValidation" class="custom-input__error">
+                        Please upload a png/jpg/jpeg file
+                    </p>
+                </div>
+                <ng-template #arrowIcon>
+                    <i class="flaticon-down-arrow"></i>
+                </ng-template>
+            </form>
+            <div class="path-uploading__status" *ngIf="isWallpaperUploading">
+                <div class="path-uploading__animation">
+                    <nz-progress [nzPercent]="isProgressWidth" nzType="circle" [nzStatus]="progressStatus"></nz-progress>
+                </div>
+                <p>{{fileUploadMessage}}</p>
+            </div>
+        </div>
+        <div class="modal-footer" *ngIf="!isWallpaperUploading">
+            <div class="modal-footer__buttons">
+                <button class="main-btn main-btn__orange" (click)="closeUpdateModal()">Cancel</button>
+                <button class="main-btn" (click)="handleUpdate()" [disabled]="updateWallpaperForm.invalid || !fileList.length || isFileValidation">Save</button>
+            </div>
+        </div>
+        <div class="modal-footer" *ngIf="isWallpaperUploading && progressStatus === 'success' || progressStatus === 'exception'">
+            <div class="modal-footer__buttons">
+                <button class="main-btn" (click)="backToUpdateForm()">Back</button>
+                <button class="main-btn main-btn__orange" (click)="closeUpdateModal()">Close</button>
+            </div>
+        </div>
+    </ng-container>
+</nz-modal>
+<ng-template #updateModalCloseIcon>
+    <i class="flaticon-close"></i>
+</ng-template>

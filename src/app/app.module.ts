@@ -24,7 +24,7 @@ export function initConfigInfo(urlList: ConfigService) {
 @NgModule({
 	declarations: [
 		AppComponent,
-		NotFoundComponent,
+		NotFoundComponent
 		// AlertModalComponent
 	],
 	imports: [

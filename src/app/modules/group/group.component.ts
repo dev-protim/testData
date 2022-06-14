@@ -21,7 +21,7 @@ export class GroupComponent implements OnInit {
 		this.createGroupComponent.isGroupModalMobile = true;
 	}
 
-	send(newGroup: any){
+	createNewGroup(newGroup: any){
 		this.newGroup = newGroup;
 		console.log(newGroup);
 	}

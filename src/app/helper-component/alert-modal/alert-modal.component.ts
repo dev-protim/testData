@@ -19,13 +19,16 @@ export class AlertModalComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.subs.add(
-			this.modalController.responseStatus.subscribe(status => this.statusReceiver = status),
+			this.modalController.responseStatus.subscribe(status => {
+				this.statusReceiver = status;
+				if (this.statusReceiver === "success" || this.statusReceiver === "failed") {
+					setTimeout(() => {
+						this.modal.destroy();
+					}, 1000);
+				}
+			}),
 			this.modalController.responseMessage.subscribe(message => this.messageReceiver = message)
 		);
-
-		setTimeout(() => {
-			this.modal.destroy();
-		}, 2000);
 	}
 
 	ngOnDestroy(): void {

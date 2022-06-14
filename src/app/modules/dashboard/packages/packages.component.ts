@@ -3,6 +3,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { ApiCallService } from 'src/app/services/api-call/api-call.service';
+import { ModalControllerService } from 'src/app/services/modal-controller/modal-controller.service';
 import { SubSink } from 'subsink';
 import { Package } from './package';
 
@@ -20,9 +21,10 @@ export class PackagesComponent implements OnInit, OnDestroy {
 	isPathAvailableModal: boolean = false;
 	packageInfo: any;
 
+	isFileValidation: boolean = false;
 	fileList: NzUploadFile[] = [];
 	isProgressWidth: any;
-	uploading: boolean = false;
+	isUploading: boolean = false;
 	packageUploadForm: any;
 	packageUpdateForm: any;
 
@@ -30,18 +32,20 @@ export class PackagesComponent implements OnInit, OnDestroy {
 	fileUploadMessage: string = 'Your file is uploading...';
 
 	progressStatus: any;
-	isUploadedStatus: boolean = false;
 
 	packageType: any[] = ['launcher_apps', 'locker_apps', 'both'];
 	packageStatus: any[] = ['active', 'deactive'];
 	noPathPackageList: any = [];
 	noPackageString: string = "No data found";
-	packageUpdateMessage: string = "Your file is uploading...";
-	packageUpdateStatus: string = 'waiting';
-	isUpdatedStatus: boolean = false;
+	// packageUpdateMessage: string = "Your package is updating...";
+	// packageUpdateStatus: string = 'waiting';
+	// isUpdatedStatus: boolean = false;
 	subs = new SubSink();
 
-	constructor(private apiService: ApiCallService, private http: HttpClient, private fb: FormBuilder) {
+	constructor(private apiService: ApiCallService,
+		private http: HttpClient,
+		private fb: FormBuilder,
+		private modalController: ModalControllerService) {
 		/**
 		 * @author Pranto
 		 * @description Get package list from API
@@ -68,31 +72,26 @@ export class PackagesComponent implements OnInit, OnDestroy {
 	getAllPackages(): void {
 		this.subs.sink = this.apiService.getPackages().subscribe(
 
-			data => {
+			response => {
 				this.isLoading = false;
-				if (data?.statusCode === 200) {
-					this.packageList = data.data;
-					console.log(this.packageList);
+				if (response?.statusCode === 200) {
+					this.packageList = response.data;
 					this.packageList.forEach((element: any) => {
 						element["copy"] = "copy";
 						element.type = element.type.replace(/_/g, " ");
 						element.created_at = element.created_at.split(" ")[0];
 					});
-					// replace _ with space
-					// this.packageList.forEach((element: any) => {
-					// }
 				} else {
-					console.log(data.body.message);
+					console.log(response.body.message);
+					this.noPackageString = response.body.msg;
 				}
 			},
 			error => {
 				this.isLoading = false;
 				console.log(error)
-				let errorMessage = error.error.detail;
+				this.noPackageString = error?.error.msg;
 				if (error?.status === 0) {
 					this.noPackageString = error?.message;
-				} else {
-					this.noPackageString = errorMessage;
 				}
 			}
 		);
@@ -102,12 +101,12 @@ export class PackagesComponent implements OnInit, OnDestroy {
 	 * @author Pranto
 	 * @description Copy package path to clipboard
 	*/
-	copyInput(packagePath: any, index: any) {
-		index.copy = "copied";
+	copyInput(packagePath: any, packageItem: any) {
+		packageItem.copy = "copied";
 		const content = packagePath.textContent;
 		navigator['clipboard'].writeText(content).then().catch(e => console.error(e));
 		setTimeout(() => {
-			index.copy = "copy";
+			packageItem.copy = "copy";
 		}, 2000);
 	}
 
@@ -128,20 +127,10 @@ export class PackagesComponent implements OnInit, OnDestroy {
 	// Close package upload modal
 	closeUploadModal(): void {
 		this.isPathModalVisible = false;
-		this.uploading = false;
+		this.isUploading = false;
 		this.packageInfo = null;
 		this.fileList = [];
-		this.isUploadedStatus = false;
 		this.isProgressWidth = 0;
-	}
-
-	// Convert file to base64
-	toDataUrl(file: any): any {
-		var reader = new FileReader();
-		reader.readAsDataURL(file);
-		reader.onload = function (e: any) {
-			file.thumbUrl = e.target.result;
-		};
 	}
 
 	// Check file before upload in upload modal
@@ -149,118 +138,64 @@ export class PackagesComponent implements OnInit, OnDestroy {
 		this.fileList = [];
 		this.fileList = this.fileList.concat(file);
 		this.fileSelected = this.fileList[0];
-		console.log(this.fileSelected);
-		// this.toDataUrl(this.fileSelected);
+		if (this.fileSelected.type === "application/vnd.android.package-archive") {
+			this.isFileValidation = false;
+		} else {
+			this.isFileValidation = true;
+		}
 		return false;
 	};
 
 	// Remove uploaded package file in modal
 	removeUploadedFile(): void {
 		this.fileList = [];
+		this.isFileValidation = true;
 	}
 
 	// Back to package path upload default view
 	backToUploadForm(): void {
-		this.uploading = false;
-		this.isUploadedStatus = false;
+		this.isUploading = false;
 		this.isProgressWidth = 0;
+		this.fileUploadMessage = 'Your file is uploading...';
 	}
 
 	// Upload package path
 	handleUpload(): any {
-		this.uploading = true;
-		this.isUploadedStatus = true;
+		this.isUploading = true;
 		const formData = new FormData();
-		console.log(typeof(formData));
 		formData.append('package_id', this.packageInfo.package_id);
 		formData.append('file', this.fileSelected);
-		// const data = {
-		// 	file: this.fileSelected.thumbUrl,
-		// 	folder: "/yolauncher/assets",
-		// 	type: "upload",
-		// 	filter: "custom",
-		// 	name: this.packageInfo.package_id,
-		// 	file_type: "apk",
-		// 	compression: false,
-		// }
-		// const data = {
-		// 	file: this.fileSelected,
-		// 	package_id: this.packageInfo.package_id
-		// }
-		// console.log(data);
-		// const finalData = {
-		// 	folder_path: data.folder,
-		// 	package_id: data.name
-		// }
 
 		this.subs.sink = this.apiService.uploadPackagePath(formData)
 			.subscribe(
-
-				(event: any) => {
-					if (event.type === HttpEventType.UploadProgress) {
-						this.isProgressWidth = Math.round(100 * event.loaded / event.total);
+				(response: any) => {
+					if (response.type === HttpEventType.UploadProgress) {
+						this.isProgressWidth = Math.round(100 * response.loaded / response.total);
 						this.progressStatus = "normal";
 					}
-					else if (event.type === HttpEventType.Response) {
+					else if (response.type === HttpEventType.Response) {
 						this.isProgressWidth = 100;
-						if (event?.body.statusCode === 200) {
-							this.fileUploadMessage = event?.body?.msg;
+						if (response?.body.statusCode === 200) {
+							this.fileUploadMessage = response?.body?.msg;
 							this.progressStatus = "success";
 							this.packageList.map((pack: any) => {
 								if (pack.package_id === formData.get('package_id')) {
-									pack.apk_path = event?.body?.data?.apk_path;
+									pack.apk_path = response?.body?.data?.apk_path;
 								}
 							})
-							this.packageInfo = null;
-							// this.packageInfo.apk_path = event?.body?.data?.apk_path;
-							// this.subs.sink = this.apiService.confirmUploadPackagePath(finalData).subscribe(
-							// 	(res: any) => {
-							// 		if (res.type === HttpEventType.Response) {
-							// 			if (res?.body.statusCode === 200) {
-							// 				this.fileUploadMessage = res?.body?.msg;
-							// 				this.progressStatus = "success";
-							// 				this.packageInfo.apk_path = res?.body?.data?.apk_path;
-
-							// 			} else {
-							// 				this.progressStatus = "exception";
-							// 				this.fileUploadMessage =  res?.msg;
-							// 			}
-							// 		}
-							// 	},
-							// 	(error: any) => {
-							// 		this.isProgressWidth = 100;
-							// 		if (error?.status === 422 || error?.status === 404) {
-							// 			this.progressStatus = "exception";
-							// 			this.fileUploadMessage =  error?.message;
-							// 		} else {
-							// 			this.progressStatus = "exception";
-							// 			this.fileUploadMessage =  error?.error.msg;
-							// 		}
-							// 	});
 						} else {
 							this.progressStatus = "exception";
-							this.fileUploadMessage =  event?.msg;
+							this.fileUploadMessage =  response?.msg;
 						}
 					}
 				},
 				(err: any) => {
-					console.log(err, "outside");
 					this.isProgressWidth = 100;
 					this.progressStatus = "exception";
-					if (err?.status === 422 || err?.status === 404) {
-						// this.progressStatus = "exception";
+					this.fileUploadMessage = err?.error.msg;
+					if (err?.status === 0) {
 						this.fileUploadMessage =  err?.message;
-					} else {
-						// this.progressStatus = "exception";
-						this.fileUploadMessage =  err?.error.msg;
 					}
-					// if (err?.error.message) {
-					// 	this.fileUploadMessage =  err?.error.message;
-					// } else if (err?.status === 0) {
-					// 	this.fileUploadMessage =  err?.message;
-					// } else {
-					// 	this.fileUploadMessage =  err?.error.msg;
-					// }
 				}
 			)
 	}
@@ -268,11 +203,7 @@ export class PackagesComponent implements OnInit, OnDestroy {
 	// Open package update modal
 	openUpdateModal(index: any): void {
 		this.isUpdateModalVisible = true;
-		// show package info based on pack index
 		this.packageInfo = this.packageList[index];
-		console.log(this.packageInfo);
-
-		// this.packageInfo = pack;
 		let status;
 		if (this.packageInfo.status == true) {
 			status = 'active';
@@ -283,24 +214,16 @@ export class PackagesComponent implements OnInit, OnDestroy {
 			name: this.packageInfo.package_name,
 			id: this.packageInfo.package_id,
 			apk_path: this.packageInfo.apk_path,
-			type: this.packageInfo.type,
+			type: this.packageInfo.type.split(' ').join('_'),
 			status: status,
 		})
-	}
-
-	// Back to default view of package update modal
-	backToUpdateForm(): void {
-		this.uploading = false;
-		this.isUpdatedStatus = false;
-		this.packageUpdateMessage = "Your file is uploading...";
-		this.packageUpdateStatus = 'waiting';
 	}
 
 	// Close package update modal
 	closeUpdateModal(): void {
 		this.isUpdateModalVisible = false;
 		this.packageInfo = null;
-		this.backToUpdateForm();
+		this.packageUpdateForm.reset();
 	}
 
 	// Submit package update form
@@ -311,31 +234,35 @@ export class PackagesComponent implements OnInit, OnDestroy {
 			type: this.packageUpdateForm.value.type,
 			status: this.packageUpdateForm.value.status === 'active' ? true : false,
 		}
-		this.uploading = true;
-		this.isUpdatedStatus = true;
+		this.modalController.changeResponseStatus("waiting");
+		this.modalController.changeResponseMessage("Please wait...");
+		this.modalController.showAlertModal();
 		this.subs.sink = this.apiService.updateInformation(data).subscribe(
-			(event: any) => {
-			if (event.type === HttpEventType.Response) {
-				if (event?.body.status === 200) {
+			(response: any) => {
+				console.log(response);
+				if (response?.statusCode === 200) {
 					this.packageList.map((pack: any) => {
 						if (pack.package_id === data.package_id) {
 							pack.type = data.type;
 							pack.status = data.status;
 						}
 					})
-					this.packageInfo = null;
-					this.packageUpdateStatus = 'success';
-					this.packageUpdateMessage = event?.body.msg;
-					console.log(this.packageList)
+					this.modalController.changeResponseStatus("success");
+					this.modalController.changeResponseMessage(response?.msg);
+					setTimeout(() => {
+						this.closeUpdateModal();
+					}, 1000);
 				} else {
-					this.packageUpdateMessage = event?.message;
-					this.packageUpdateStatus = 'failed';
+					this.modalController.changeResponseStatus("failed");
+					this.modalController.changeResponseMessage(response?.msg)
 				}
-			}
 		},
 		(error: any) => {
-			this.packageUpdateStatus = 'failed';
-			this.packageUpdateMessage = error?.message;
+			this.modalController.changeResponseStatus("failed");
+			this.modalController.changeResponseMessage(error?.error.msg)
+			if (error.status === 0) {
+				this.modalController.changeResponseMessage(error?.message)
+			}
 		}
 		)
 	}

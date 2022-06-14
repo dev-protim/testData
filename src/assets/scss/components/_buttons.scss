@@ -67,6 +67,13 @@ button {
             background-color: abstract.$secondaryColor;
         }
     }
+    &__danger {
+        background-color: abstract.$danger;
+        border-color: abstract.$danger;
+        &:hover {
+            background-color: abstract.$danger;
+        }
+    }
     &:disabled {
         opacity: 0.7;
         cursor: not-allowed;

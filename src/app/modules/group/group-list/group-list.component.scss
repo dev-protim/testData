@@ -12,35 +12,37 @@
         }
         &__info {
             position: relative;
-            cursor: pointer;
-            @include padding(null, 30, null, null);
-            &:after {
-                content: "\f106";
-                font-family: Flaticon;
-                // width: 17px;
-                // height: 17px;
-                // background: transparent;
-                // border: 1px solid abstract.$primaryColor;
-                // border-radius: 50%;
-                position: absolute;
-                top: 0;
-                right: 0;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                line-height: 12px;
-                color: var(--text-color);
-                transition: transform 0.3s ease;
-                @include font-size-em(20);
-                // @include respond-to(small) {
-                //     // width: 20px;
-                //     // height: 20px;
-                // }
+            display: flex;
+            justify-content: space-between;
+            &--action {
+                display: inline-flex;
+                height: 100%;
+                li {
+                    list-style: none;
+                    @include margin(null, null, null, 10);
+                    cursor: pointer;
+                    @include font-size-em(15);
+                    i {
+                        line-height: 1px;
+                        display: inline-block;
+                        transition: all 0.3s linear;
+                        &:hover {
+                            color: abstract.$secondaryColor;
+                        }
+                    }
+                    &.device-item__expand {
+                        i {
+                            transition: all 0.3s ease;
+                            &:hover {
+                                color: abstract.$primaryColor;
+                            }
+                        }
+                    }
+                }
             }
             h3 {
                 @include font-size-em(16);
                 pointer-events: none;
-                // @include font-weight(400);
                 span {
                     width: 5px;
                     height: 5px;
@@ -48,14 +50,12 @@
                     background-color: abstract.$danger;
                     display: inline-block;
                     line-height: 1;
-                    // vertical-align: middle;
                     margin-right: 2px;
                     position: relative;
                     top: -2px;
                     &.is-connected {
                         background-color: abstract.$success;
                     }
-                    // @include font-weight(400) // color: abstract.$primaryColor;
                 }
                 @include respond-to(small) {
                     span {
@@ -72,24 +72,41 @@
         &__products {
             height: 0;
             transition: all 0.3s ease, opacity 0.2s ease;
-            // opacity: 0;
             overflow: hidden;
             .dashboard-table {
                 @include margin(12, null, null, null);
                 border-top: 1px solid rgba(abstract.$grayColor, 0.42);
                 @include padding(10, null, 0, null);
+                tbody {
+                    td {
+                        span {
+                            width: 5px;
+                            height: 5px;
+                            border-radius: 50%;
+                            background-color: abstract.$danger;
+                            display: inline-block;
+                            line-height: 1;
+                            margin-right: 6px;
+                            position: relative;
+                            top: -2px;
+                            &.is-connected {
+                                background-color: abstract.$success;
+                            }
+                        }
+                    }
+                }
             }
         }
         &__expanded {
             .device-item {
                 &__info {
-                    &:after {
-                        transform: rotate(180deg);
+                    &--action {
+                        li.device-item__expand {
+                            i {
+                                transform: rotate(180deg);
+                            }
+                        }
                     }
-                }
-                &__products {
-                    // @include padding(12, null, null, null);
-                    // opacity: 1;
                 }
             }
         }
