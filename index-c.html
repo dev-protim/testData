@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Converter</title>
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <input type="file" class="jpg-upload-input">
+</body>
+
+<script>
+    const jpg_to_png_converter = (() => {
+        function converter(imageFileBlob, options) {
+            options = options || {}
+
+            // Create a canvas element and then putting the image (jpg) there
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            const imageElement = createImage();
+            const downloadLink = document.createElement('a');
+
+            // Here we create our image blob
+            function createImage(options) {
+                options = options || {}
+                const image = document.createElement('img');
+
+                image.style.width = options.width ? `${option.width}px` : "auto";
+                image.style.height = options.height ? `${option.height}px` : "auto";
+
+                console.log(image)
+
+                return image;
+            }
+
+            function createPng(jpgFileName, pngBlob) {
+                const pngFileName = jpgFileName.replace(/jpg?g/i, "png");
+                const data = {
+                    name: pngFileName,
+                    size: pngBlob.size,
+                    type: pngBlob.type
+                }
+                console.log(data, 'pngBlob');
+                // Change the blob type to file type
+                // pngBlob.type = "image/png";
+                // Create a new file object
+                const pngFile = new File([pngBlob], pngFileName, data);
+
+
+                // // Add data into a new array with type file
+                const files = [pngFile];
+                console.log(files, 'files');
+
+
+
+
+
+
+
+                // const pngBlobArray = new Array();
+                // pngBlobArray.push(data);
+                // console.log(pngBlobArray, 'pngBlobArray');
+                // // Change the array type to file
+                // const pngFileArray = new File(pngBlobArray, pngFileName, data);
+                // console.log(pngFileArray, 'pngFileArray');
+
+                // // Change to type of pngBlobArray to file
+                // const pngBlobFile = new File(pngBlobArray, pngFileName, {
+                //     type: pngBlob.type
+                // });
+                // console.log(pngBlobFile, 'pngBlobFile');
+            }
+
+            function process() {
+                console.log(imageFileBlob, "imageFileBlob")
+                const imageUrl = URL.createObjectURL(imageFileBlob);
+                console.log(imageUrl)
+
+                imageElement.addEventListener('load', event => {
+                    canvas.width = event.target.width;
+                    canvas.height = event.target.height;
+                    context.drawImage(event.target, 0, 0, event.target.width, event.target.height);
+                    canvas.toBlob(
+                        createPng.bind(window, imageFileBlob.name),
+                        "image/png"
+                    )
+                })
+
+                imageElement.src = imageUrl;
+            }
+
+            return {
+                process: process
+            }
+        }
+        return converter
+    })()
+
+    // HTML input file
+    const imageFileElement = document.querySelector('.jpg-upload-input');
+
+    // Add file change event handler
+    imageFileElement.addEventListener('change', event => {
+        const jpgFileBlob = event.currentTarget.files[0];
+        console.log(jpgFileBlob);
+        jpg_to_png_converter(jpgFileBlob).process();
+        // if (jpgFileBlob.match(/image\/jpe?g/i) !== null) {
+        // }
+    })
+</script>
+
+</html>
